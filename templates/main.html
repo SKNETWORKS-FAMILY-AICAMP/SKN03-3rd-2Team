@@ -4,8 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    {%load static%}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
   </head>
   <body>
-    <div>main 페이지</div>
+    <div>
+      <header class="main-header">
+        <div class="logo">logo</div>
+        <ul class="nav">
+          <li>main</li>
+          <li>analysis</li>
+          <li>prediction</li>
+        </ul>
+      </header>
+    </div>
   </body>
 </html>
