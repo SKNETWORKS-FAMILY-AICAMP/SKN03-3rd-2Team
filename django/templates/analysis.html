@@ -225,6 +225,7 @@
           </table>
           <div class="analysis-section">
             <h1>이탈율과 수치형 데이터 분석</h1>
+            <img src="{{image_url}}" alt="chart" />
             <h2>Boxplot 분석 결론</h2>
             <div class="analysis-text">
               <h3>1. Tenure vs Churn</h3>
@@ -387,8 +388,8 @@
           <div>
             <h1>
               전화 및 인터넷 서비스
-              <img src="{{service_url}}" alt="chart" />
             </h1>
+              <img src="{{service_url}}" alt="chart" />
           </div>
           <div>
             <h1>온라인 및 기타 부가 서비스</h1>
@@ -402,134 +403,76 @@
             <h1>범주형 변수 vs Churn 분석 결론</h1>
             <div>
               <h1>이탈율을 낮추기 위한 피처 조정 제안</h1>
-
-              <div class="analysis-text">
-                <h2>1. Contract (계약 유형)</h2>
-                <p>
-                  <strong>Month-to-month 계약</strong> 고객의 이탈율이 높고
-                  <strong>Two year 계약</strong>을 맺은 고객의 이탈율은 매우
-                  낮습니다.
-                </p>
-                <p>단기 계약을 줄이고 장기 계약 비율을 늘립니다.</p>
-
-                <h3>서비스 제안:</h3>
-                <ul>
-                  <li>장기 계약을 독려하는 정책을 도입</li>
-                  <li>
-                    신규가입자에게 <strong>One year</strong> 또는
-                    <strong>Two year 계약</strong>을 선택할 때 더 많은 혜택이나
-                    할인을 제공
-                  </li>
-                  <li>
-                    기존 사용자 <strong>Month-to-month 계약</strong>의 고객에게
-                    장기 계약으로 전환할 때 인센티브를 제공
-                  </li>
-                </ul>
-              </div>
-
-              <div class="analysis-text">
-                <h2>2. OnlineSecurity (온라인 보안 서비스)</h2>
-                <p>
-                  <strong>No</strong>(온라인 보안 서비스가 없는 경우) 고객의
-                  이탈율이 높습니다.
-                </p>
-                <p>
-                  <strong>Yes</strong>(온라인 보안 서비스를 사용하는 경우)
-                  이탈율이 낮습니다.
-                </p>
-                <p>온라인 보안 서비스 비율을 늘립니다.</p>
-
-                <h3>서비스 제안:</h3>
-                <ul>
-                  <li>온라인 보안 서비스를 추가하도록 권장</li>
-                  <li>추가 서비스의 혜택을 강조하는 마케팅을 진행</li>
-                  <li>
-                    <strong>무료 체험</strong>이나
-                    <strong>할인 프로모션</strong>을 제공
-                  </li>
-                </ul>
-              </div>
-
-              <div class="analysis-text">
-                <h2>3. TechSupport (기술 지원 서비스)</h2>
-                <p>
-                  <strong>No</strong>(기술 지원 서비스를 사용하지 않는 고객)의
-                  이탈율이 높습니다.
-                </p>
-                <p>
-                  <strong>Yes</strong>(기술 지원 서비스를 사용하는 고객)은
-                  이탈율이 낮습니다.
-                </p>
-                <p>기술 지원 서비스 비율을 늘립니다.</p>
-
-                <h3>서비스 제안:</h3>
-                <ul>
-                  <li>
-                    기술 지원 서비스의 혜택을 강조하고 사용하지 않는 고객에게
-                    이를 추가 서비스로 포함할 수 있는 옵션을 제공
-                  </li>
-                </ul>
-              </div>
-
-              <div class="analysis-text">
-                <h2>4. InternetService (인터넷 서비스 유형)</h2>
-                <p>
-                  <strong>Fiber optic</strong> 서비스를 사용하는 고객의 이탈율이
-                  높습니다.
-                </p>
-                <p>
-                  <strong>DSL</strong> 서비스를 사용하는 고객의 이탈율은
-                  상대적으로 낮습니다.
-                </p>
-
-                <h3>서비스 제안:</h3>
-                <ul>
-                  <li>
-                    Fiber optic 서비스에 대한 서비스 품질 개선이나 가격 재검토가
-                    필요
-                  </li>
-                  <li>
-                    추가 혜택을 제공하거나
-                    <strong>속도 및 안정성 개선</strong>을 위해 노력
-                  </li>
-                </ul>
-              </div>
-
-              <div class="analysis-text">
-                <h2>5. PaymentMethod (결제 방식)</h2>
-                <p>
-                  <strong>Electronic check</strong>로 결제하는 고객의 이탈율이
-                  높습니다.
-                </p>
-                <p>
-                  <strong>Bank transfer(자동 이체)</strong>,
-                  <strong>Credit card(자동)</strong> 방식의 결제를 사용하는
-                  고객의 이탈율은 상대적으로 낮습니다.
-                </p>
-
-                <h3>서비스 제안:</h3>
-                <ul>
-                  <li>
-                    Electronic check 결제 고객에게 자동 이체나 신용카드 결제로
-                    전환할 수 있는 혜택을 제공
-                  </li>
-                </ul>
-              </div>
-
-              <div class="analysis-text">
-                <h1>종합적인 제안</h1>
-                <p>
-                  장기 계약과 추가 서비스를 통해 고객 이탈율을 낮출 수 있습니다.
-                </p>
-                <p>
-                  결제 방식과 부가 서비스(온라인 보안, 기술 지원)를 개선하는
-                  정책을 통해 이탈율을 낮출 수 있습니다.
-                </p>
-                <p>
-                  특히 고객 서비스 개선과 가격 정책을 통해 고객 만족도를 높여,
-                  이탈율을 줄일 수 있습니다.
-                </p>
-              </div>
+              <div >
+        
+                <!-- Contract Section -->
+                <div class="card">
+                    <h2>1. Contract (계약 유형)</h2>
+                    <p>
+                        <strong>분석:</strong> Month-to-month 계약 고객의 이탈율이 높고, Two year 계약을 맺은 고객의 이탈율은 매우 낮습니다.
+                    </p>
+                    <p>
+                        <strong>제안:</strong> 단기 계약을 줄이고 장기 계약 비율을 늘리기 위해 장기 계약을 독려하는 정책을 도입합니다.
+                        <ul>
+                            <li>신규가입자에게 One year 또는 Two year 계약을 선택할 때 더 많은 혜택이나 할인을 제공</li>
+                            <li>기존 Month-to-month 고객에게 장기 계약 전환 시 인센티브 제공</li>
+                        </ul>
+                    </p>
+                </div>
+        
+                <!-- Online Security Section -->
+                <div class="card">
+                    <h2>2. OnlineSecurity (온라인 보안 서비스)</h2>
+                    <p>
+                        <strong>분석:</strong> No(온라인 보안 서비스가 없는 경우) 고객의 이탈율이 높으며, Yes(온라인 보안 서비스를 사용하는 경우) 이탈율이 낮습니다.
+                    </p>
+                    <p>
+                        <strong>제안:</strong> 온라인 보안 서비스 비율을 늘리기 위해 아래 서비스를 제안합니다.
+                        <ul>
+                            <li>온라인 보안 서비스를 추가하도록 권장</li>
+                            <li>추가 서비스의 혜택을 강조하는 마케팅 진행</li>
+                            <li>무료 체험이나 할인 프로모션 제공</li>
+                        </ul>
+                    </p>
+                </div>
+        
+                <!-- Other Sections Follow the Same Format -->
+                <div class="card">
+                    <h2>3. TechSupport (기술 지원 서비스)</h2>
+                    <p>
+                        <strong>분석:</strong> No(기술 지원 서비스를 사용하지 않는 고객)의 이탈율이 높으며, Yes(기술 지원 서비스를 사용하는 고객)의 이탈율이 낮습니다.
+                    </p>
+                    <p>
+                        <strong>제안:</strong> 기술 지원 서비스 비율을 늘리기 위해, 사용하지 않는 고객에게 추가 옵션을 제공하거나 혜택을 강조합니다.
+                    </p>
+                </div>
+        
+                <div class="card">
+                    <h2>4. InternetService (인터넷 서비스 유형)</h2>
+                    <p>
+                        <strong>분석:</strong> Fiber optic 서비스를 사용하는 고객의 이탈율이 높고, DSL 서비스를 사용하는 고객의 이탈율은 상대적으로 낮습니다.
+                    </p>
+                    <p>
+                        <strong>제안:</strong> Fiber optic 서비스의 품질 개선이나 가격 재검토가 필요합니다.
+                    </p>
+                </div>
+        
+                <div class="card">
+                    <h2>5. PaymentMethod (결제 방식)</h2>
+                    <p>
+                        <strong>분석:</strong> Electronic check로 결제하는 고객의 이탈율이 높습니다.
+                    </p>
+                    <p>
+                        <strong>제안:</strong> Electronic check 결제 고객에게 자동 이체나 신용카드 결제로 전환할 수 있는 혜택을 제공합니다.
+                    </p>
+                </div>
+        
+                <div class="card summary">
+                    <h2>종합적인 제안</h2>
+                    <p>장기 계약과 추가 서비스를 통해 고객 이탈율을 낮출 수 있습니다. 결제 방식과 부가 서비스(온라인 보안, 기술 지원)를 개선하는 정책을 통해 이탈율을 줄일 수 있습니다.</p>
+                </div>
+            </div>
+             
             </div>
           </div>
         </div>
