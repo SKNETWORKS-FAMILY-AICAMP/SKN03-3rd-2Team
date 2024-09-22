@@ -69,7 +69,8 @@ def analysis(request):
     image_url = os.path.join(settings.MEDIA_URL, 'chart.png')
     
     return render(request, 'analysis.html', 
-                  {'image_url': image_url, 'corellation_url': corellation_url, 
+                  {'image_url': image_url, 
+                   'corellation_url': corellation_url, 
                    'standard_compare_url': standard_compare_url,
                    'customer_char_url':customer_char_url,
                    'service_url':service_url,
