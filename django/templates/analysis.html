@@ -4,8 +4,537 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    {%load static%}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <script src="
+    https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js
+    "></script>
   </head>
   <body>
-    <div>분석 페이지</div>
+    <div>
+      <header>
+        <nav class="navbar">
+          <div class="logo">
+            <a href="/">
+              <img class="logo-image" src="{% static 'img/logo.png' %}" />
+              <h2>텔레핑</h2>
+            </a>
+          </div>
+          <ul class="nav-links">
+            <li class="{% if request.path == '/' %}active{% endif %}">
+              <a href="/">Home</a>
+            </li>
+            <li class="{% if request.path == '/analysis/' %}active{% endif %}">
+              <a href="/analysis">Analysis</a>
+            </li>
+            <li
+              class="{% if request.path == '/prediction/' %}active{% endif %}"
+            >
+              <a href="/prediction">Prediction</a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <div class="container">
+        <div>
+          <table border="1">
+            <thead>
+              <tr>
+                <th>컬럼</th>
+                <th>설명</th>
+                <th>타입</th>
+                <th>범주 값</th>
+                <th>역할</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>customerID</td>
+                <td>각 고객을 고유하게 식별할 수 있는 고객 ID</td>
+                <td>문자열 (범주형)</td>
+                <td>-</td>
+                <td>고객별로 데이터를 구분하기 위한 식별자</td>
+              </tr>
+              <tr>
+                <td>gender</td>
+                <td>고객의 성별</td>
+                <td>문자열 (범주형)</td>
+                <td>Male, Female</td>
+                <td>성별에 따른 이탈율 차이를 분석할 수 있습니다.</td>
+              </tr>
+              <tr>
+                <td>SeniorCitizen</td>
+                <td>고객이 고령자인지 여부</td>
+                <td>정수형 (0 또는 1)</td>
+                <td>0 (고령자 아님), 1 (고령자)</td>
+                <td>나이에 따른 이탈율 차이를 분석할 수 있습니다.</td>
+              </tr>
+              <tr>
+                <td>Partner</td>
+                <td>고객이 배우자가 있는지 여부</td>
+                <td>문자열 (범주형)</td>
+                <td>Yes, No</td>
+                <td>파트너 여부에 따른 이탈율 차이를 분석할 수 있습니다.</td>
+              </tr>
+              <tr>
+                <td>Dependents</td>
+                <td>고객이 부양가족이 있는지 여부</td>
+                <td>문자열 (범주형)</td>
+                <td>Yes, No</td>
+                <td>부양 가족 여부에 따른 이탈율을 분석할 수 있습니다.</td>
+              </tr>
+              <tr>
+                <td>tenure</td>
+                <td>서비스 이용 기간 (개월)</td>
+                <td>정수형 (수치형)</td>
+                <td>-</td>
+                <td>가입 기간에 따른 이탈율을 분석할 수 있습니다.</td>
+              </tr>
+              <tr>
+                <td>PhoneService</td>
+                <td>전화 서비스 이용 여부</td>
+                <td>문자열 (범주형)</td>
+                <td>Yes, No</td>
+                <td>
+                  전화 서비스 이용 여부에 따른 이탈율을 분석할 수 있습니다.
+                </td>
+              </tr>
+              <tr>
+                <td>MultipleLines</td>
+                <td>여러 전화선 사용 여부</td>
+                <td>문자열 (범주형)</td>
+                <td>Yes, No, No phone service</td>
+                <td>
+                  여러 전화선 사용 여부에 따른 이탈율을 분석할 수 있습니다.
+                </td>
+              </tr>
+              <tr>
+                <td>InternetService</td>
+                <td>인터넷 서비스 유형</td>
+                <td>문자열 (범주형)</td>
+                <td>DSL, Fiber optic, No</td>
+                <td>
+                  인터넷 서비스 종류에 따른 이탈율 차이를 분석할 수 있습니다.
+                </td>
+              </tr>
+              <tr>
+                <td>OnlineSecurity</td>
+                <td>온라인 보안 서비스 가입 여부</td>
+                <td>문자열 (범주형)</td>
+                <td>Yes, No, No internet service</td>
+                <td>
+                  보안 서비스 가입 여부에 따른 이탈율을 분석할 수 있습니다.
+                </td>
+              </tr>
+              <tr>
+                <td>OnlineBackup</td>
+                <td>온라인 백업 서비스 사용 여부</td>
+                <td>문자열 (범주형)</td>
+                <td>Yes, No, No internet service</td>
+                <td>
+                  백업 서비스 사용 여부에 따른 이탈율을 분석할 수 있습니다.
+                </td>
+              </tr>
+              <tr>
+                <td>DeviceProtection</td>
+                <td>디바이스 보호 서비스 사용 여부</td>
+                <td>문자열 (범주형)</td>
+                <td>Yes, No, No internet service</td>
+                <td>
+                  디바이스 보호 서비스 사용 여부에 따른 이탈율을 분석할 수
+                  있습니다.
+                </td>
+              </tr>
+              <tr>
+                <td>TechSupport</td>
+                <td>기술 지원 서비스 사용 여부</td>
+                <td>문자열 (범주형)</td>
+                <td>Yes, No, No internet service</td>
+                <td>
+                  기술 지원 서비스 가입 여부에 따른 이탈율을 분석할 수 있습니다.
+                </td>
+              </tr>
+              <tr>
+                <td>StreamingTV</td>
+                <td>스트리밍 TV 서비스 사용 여부</td>
+                <td>문자열 (범주형)</td>
+                <td>Yes, No, No internet service</td>
+                <td>
+                  스트리밍 TV 서비스 사용 여부에 따른 이탈율을 분석할 수
+                  있습니다.
+                </td>
+              </tr>
+              <tr>
+                <td>StreamingMovies</td>
+                <td>스트리밍 영화 서비스 사용 여부</td>
+                <td>문자열 (범주형)</td>
+                <td>Yes, No, No internet service</td>
+                <td>
+                  스트리밍 영화 서비스 사용 여부에 따른 이탈율을 분석할 수
+                  있습니다.
+                </td>
+              </tr>
+              <tr>
+                <td>Contract</td>
+                <td>계약 유형</td>
+                <td>문자열 (범주형)</td>
+                <td>Month-to-month, One year, Two year</td>
+                <td>계약 기간에 따른 이탈율을 분석할 수 있습니다.</td>
+              </tr>
+              <tr>
+                <td>PaperlessBilling</td>
+                <td>종이 없는 청구서 사용 여부</td>
+                <td>문자열 (범주형)</td>
+                <td>Yes, No</td>
+                <td>
+                  온라인 청구서 사용 여부에 따른 이탈율을 분석할 수 있습니다.
+                </td>
+              </tr>
+              <tr>
+                <td>PaymentMethod</td>
+                <td>결제 방식</td>
+                <td>문자열 (범주형)</td>
+                <td>
+                  Electronic check, Mailed check, Bank transfer (automatic),
+                  Credit card (automatic)
+                </td>
+                <td>결제 방식에 따른 이탈율 차이를 분석할 수 있습니다.</td>
+              </tr>
+              <tr>
+                <td>MonthlyCharges</td>
+                <td>매월 청구 금액</td>
+                <td>수치형 (float)</td>
+                <td>-</td>
+                <td>월 청구 금액에 따른 이탈율을 분석할 수 있습니다.</td>
+              </tr>
+              <tr>
+                <td>TotalCharges</td>
+                <td>총 청구 금액</td>
+                <td>수치형 (float)</td>
+                <td>-</td>
+                <td>누적 청구 금액에 따른 이탈율을 분석할 수 있습니다.</td>
+              </tr>
+              <tr>
+                <td>Churn</td>
+                <td>고객의 서비스 해지 여부</td>
+                <td>문자열 (범주형)</td>
+                <td>Yes, No</td>
+                <td>이탈(Churn)을 예측하는 타겟 변수</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="analysis-section">
+            <h1>이탈율과 수치형 데이터 분석</h1>
+            <h2>Boxplot 분석 결론</h2>
+            <div class="analysis-text">
+              <h3>1. Tenure vs Churn</h3>
+              <p>
+                <strong>이탈한 고객</strong> (Churn = Yes)은
+                <strong>짧은 서비스 가입 기간(tenure)</strong>을 가진다.
+              </p>
+              <p>
+                <strong>이탈하지 않은 고객</strong> (Churn = No)은
+                <strong>가입 기간이 더 긴</strong> 경향을 보여준다.
+              </p>
+              <p>
+                따라서,
+                <strong
+                  >서비스 가입 기간이 짧은 고객이 이탈할 가능성이 높다</strong
+                >는 것을 보여준다.
+              </p>
+
+              <h3>2. MonthlyCharges vs Churn</h3>
+              <p>
+                <strong>이탈한 고객</strong>은 월 청구 금액(MonthlyCharges)이
+                <strong>상대적으로 높다</strong>.
+              </p>
+              <p>
+                반면, <strong>이탈하지 않은 고객</strong>은
+                <strong>낮은 월 청구 금액</strong>을 지불하는 경향을 보인다.
+              </p>
+              <p>
+                이는 <strong>고가 요금제</strong> 이용자가 이탈할 가능성이 더
+                높다는 것을 나타낸다.
+              </p>
+
+              <h3>3. TotalCharges vs Churn</h3>
+              <p>
+                <strong>이탈한 고객</strong>은
+                <strong>총 청구 금액(TotalCharges)</strong>이 낮은 경향을
+                보인다.
+              </p>
+              <p>
+                이는 주로 <strong>가입 기간이 짧은 신규 고객</strong>이 이탈했기
+                때문일 가능성이 크다.
+              </p>
+              <p>
+                <strong>총 청구 금액이 낮은</strong> 고객이 이탈할 가능성이 더
+                높다고 해석할 수 있다.
+              </p>
+
+              <h3>4. 이상치에 대한 분석</h3>
+              <p>
+                <strong>TotalCharges</strong>에서
+                <strong>이상치(outliers)</strong>가 발견되며, 특히
+                <strong>이탈하지 않은 고객</strong> 중에서 높은 총 청구 금액을
+                가진 고객들이 존재한다.
+              </p>
+              <p>
+                이러한 이상치는
+                <strong
+                  >서비스 이용 기간이 매우 길거나 높은 요금제를 오랫동안 사용한
+                  고객</strong
+                >일 가능성이 크다.
+              </p>
+              <p>
+                이상치 고객에 대한 추가 분석을 통해, 이들의 특성을 더 깊이
+                파악할 필요가 있다.
+              </p>
+            </div>
+          </div>
+          <div>
+            <h1>상관관계 분석 결과</h1>
+            <img src="{{corellation_url}}" alt="Boxplot Chart" />
+            <div class="analysis-text">
+              <h2>1. Tenure와 Churn</h2>
+              <p><strong>상관계수:</strong> -0.35</p>
+              <p>
+                <strong>해석:</strong> 서비스 가입 기간이 길수록 이탈할 가능성이
+                낮음을 의미한다. 즉,
+                <strong>장기 가입 고객이 이탈할 가능성이 적다</strong>.
+              </p>
+
+              <h2>2. TotalCharges와 Churn</h2>
+              <p><strong>상관계수:</strong> -0.20</p>
+              <p>
+                <strong>해석:</strong> 총 청구 금액이 높을수록 이탈할 가능성이
+                다소 낮다. 이는 장기간 서비스 이용 고객이 총 청구 금액을 많이
+                지불한 경우가 많기 때문으로 해석된다.
+              </p>
+
+              <h2>3. MonthlyCharges와 Churn</h2>
+              <p><strong>상관계수:</strong> 0.19</p>
+              <p>
+                <strong>해석:</strong> 월 청구 금액이 높을수록 이탈할 가능성이
+                약간 높아진다. 이는 <strong>고가 요금제 사용자</strong>가 이탈할
+                가능성이 더 높다는 것을 시사한다.
+              </p>
+            </div>
+          </div>
+          <div>
+            <h1>수치형 변수들의 평균과 표준편차 비교</h1>
+            <img src="{{standard_compare_url}}" alt="Boxplot Chart" />
+            <div class="analysis-text">
+              <h2>1. Tenure (서비스 가입 기간)</h2>
+              <p>
+                <strong>평균:</strong> 이탈한 고객(Churn = Yes)의
+                <strong>평균 가입 기간</strong>은 약 18개월로, 이탈하지 않은
+                고객(Churn = No)의 평균인 36개월에 비해 <strong>짧다</strong>.
+              </p>
+              <p>
+                <strong>표준편차:</strong> 이탈하지 않은 고객의
+                <strong>가입 기간 변동성</strong>(표준편차)이 더 크며, 이탈
+                고객은 더 <strong>일정한 패턴</strong>을 보인다.
+              </p>
+
+              <h2>2. MonthlyCharges (월 청구 금액)</h2>
+              <p>
+                <strong>평균:</strong> 이탈한 고객(Churn = Yes)의
+                <strong>평균 월 청구 금액</strong>은 약 74로, 이탈하지 않은
+                고객의 평균인 61에 비해 <strong>높다</strong>.
+              </p>
+              <p>
+                <strong>표준편차:</strong> 이탈한 고객의 월 청구 금액
+                변동성(표준편차)이 이탈하지 않은 고객보다 <strong>작다</strong>,
+                즉 이탈한 고객의 월 청구 금액이 상대적으로 일정하다.
+              </p>
+
+              <h2>3. TotalCharges (총 청구 금액)</h2>
+              <p>
+                <strong>평균:</strong> 이탈한 고객(Churn = Yes)의
+                <strong>총 청구 금액</strong>은 약 1,500으로, 이탈하지 않은
+                고객(Churn = No)의 총 청구 금액인 2,500에 비해
+                <strong>현저히 낮다</strong>.
+              </p>
+              <p>
+                <strong>표준편차:</strong> 이탈하지 않은 고객의
+                <strong>총 청구 금액 변동성</strong>(표준편차)이 더 크며, 이탈
+                고객은 일정한 총 청구 금액 패턴을 보인다.
+              </p>
+
+              <h2>결론:</h2>
+              <p>
+                <strong>이탈한 고객</strong>은 대체로
+                <strong>짧은 서비스 기간</strong>과
+                <strong>높은 월 청구 금액</strong>을 보인다.
+              </p>
+              <p>
+                <strong>이탈하지 않은 고객</strong>은
+                <strong>서비스 가입 기간이 길고</strong>,
+                <strong>총 청구 금액이 많으며</strong> 변동성도 크다.
+              </p>
+              <p>
+                <strong>이탈 고객의 변동성(표준편차)</strong>이 더 작다는 점은,
+                이탈 고객이 더 <strong>일정한 패턴</strong>을 가진다는 점을
+                시사한다.
+              </p>
+            </div>
+          </div>
+          <div>
+            <h1>고객 특성</h1>
+            <img src="{{customer_char_url}}" alt="Boxplot Chart" />
+          </div>
+          <div>
+            <h1>
+              전화 및 인터넷 서비스
+              <img src="{{service_url}}" alt="chart" />
+            </h1>
+          </div>
+          <div>
+            <h1>온라인 및 기타 부가 서비스</h1>
+            <img src="{{additinal_service_url}}" alt="chart" />
+          </div>
+          <div>
+            <h1>계약 및 결제 수단과 연관성</h1>
+            <img src="{{contract_url}}" alt="chart" />
+          </div>
+          <div>
+            <h1>범주형 변수 vs Churn 분석 결론</h1>
+            <div>
+              <h1>이탈율을 낮추기 위한 피처 조정 제안</h1>
+
+              <div class="analysis-text">
+                <h2>1. Contract (계약 유형)</h2>
+                <p>
+                  <strong>Month-to-month 계약</strong> 고객의 이탈율이 높고
+                  <strong>Two year 계약</strong>을 맺은 고객의 이탈율은 매우
+                  낮습니다.
+                </p>
+                <p>단기 계약을 줄이고 장기 계약 비율을 늘립니다.</p>
+
+                <h3>서비스 제안:</h3>
+                <ul>
+                  <li>장기 계약을 독려하는 정책을 도입</li>
+                  <li>
+                    신규가입자에게 <strong>One year</strong> 또는
+                    <strong>Two year 계약</strong>을 선택할 때 더 많은 혜택이나
+                    할인을 제공
+                  </li>
+                  <li>
+                    기존 사용자 <strong>Month-to-month 계약</strong>의 고객에게
+                    장기 계약으로 전환할 때 인센티브를 제공
+                  </li>
+                </ul>
+              </div>
+
+              <div class="analysis-text">
+                <h2>2. OnlineSecurity (온라인 보안 서비스)</h2>
+                <p>
+                  <strong>No</strong>(온라인 보안 서비스가 없는 경우) 고객의
+                  이탈율이 높습니다.
+                </p>
+                <p>
+                  <strong>Yes</strong>(온라인 보안 서비스를 사용하는 경우)
+                  이탈율이 낮습니다.
+                </p>
+                <p>온라인 보안 서비스 비율을 늘립니다.</p>
+
+                <h3>서비스 제안:</h3>
+                <ul>
+                  <li>온라인 보안 서비스를 추가하도록 권장</li>
+                  <li>추가 서비스의 혜택을 강조하는 마케팅을 진행</li>
+                  <li>
+                    <strong>무료 체험</strong>이나
+                    <strong>할인 프로모션</strong>을 제공
+                  </li>
+                </ul>
+              </div>
+
+              <div class="analysis-text">
+                <h2>3. TechSupport (기술 지원 서비스)</h2>
+                <p>
+                  <strong>No</strong>(기술 지원 서비스를 사용하지 않는 고객)의
+                  이탈율이 높습니다.
+                </p>
+                <p>
+                  <strong>Yes</strong>(기술 지원 서비스를 사용하는 고객)은
+                  이탈율이 낮습니다.
+                </p>
+                <p>기술 지원 서비스 비율을 늘립니다.</p>
+
+                <h3>서비스 제안:</h3>
+                <ul>
+                  <li>
+                    기술 지원 서비스의 혜택을 강조하고 사용하지 않는 고객에게
+                    이를 추가 서비스로 포함할 수 있는 옵션을 제공
+                  </li>
+                </ul>
+              </div>
+
+              <div class="analysis-text">
+                <h2>4. InternetService (인터넷 서비스 유형)</h2>
+                <p>
+                  <strong>Fiber optic</strong> 서비스를 사용하는 고객의 이탈율이
+                  높습니다.
+                </p>
+                <p>
+                  <strong>DSL</strong> 서비스를 사용하는 고객의 이탈율은
+                  상대적으로 낮습니다.
+                </p>
+
+                <h3>서비스 제안:</h3>
+                <ul>
+                  <li>
+                    Fiber optic 서비스에 대한 서비스 품질 개선이나 가격 재검토가
+                    필요
+                  </li>
+                  <li>
+                    추가 혜택을 제공하거나
+                    <strong>속도 및 안정성 개선</strong>을 위해 노력
+                  </li>
+                </ul>
+              </div>
+
+              <div class="analysis-text">
+                <h2>5. PaymentMethod (결제 방식)</h2>
+                <p>
+                  <strong>Electronic check</strong>로 결제하는 고객의 이탈율이
+                  높습니다.
+                </p>
+                <p>
+                  <strong>Bank transfer(자동 이체)</strong>,
+                  <strong>Credit card(자동)</strong> 방식의 결제를 사용하는
+                  고객의 이탈율은 상대적으로 낮습니다.
+                </p>
+
+                <h3>서비스 제안:</h3>
+                <ul>
+                  <li>
+                    Electronic check 결제 고객에게 자동 이체나 신용카드 결제로
+                    전환할 수 있는 혜택을 제공
+                  </li>
+                </ul>
+              </div>
+
+              <div class="analysis-text">
+                <h1>종합적인 제안</h1>
+                <p>
+                  장기 계약과 추가 서비스를 통해 고객 이탈율을 낮출 수 있습니다.
+                </p>
+                <p>
+                  결제 방식과 부가 서비스(온라인 보안, 기술 지원)를 개선하는
+                  정책을 통해 이탈율을 낮출 수 있습니다.
+                </p>
+                <p>
+                  특히 고객 서비스 개선과 가격 정책을 통해 고객 만족도를 높여,
+                  이탈율을 줄일 수 있습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'js/main.js' %}"></script>
   </body>
 </html>
