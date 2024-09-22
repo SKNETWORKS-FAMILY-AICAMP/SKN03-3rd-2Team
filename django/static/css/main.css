@@ -1,32 +1,177 @@
-.main-header {
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+
+body {
+  font-family: 'Arial', sans-serif;
+}
+
+header {
+  background-color: rgb(50,123,255);
+}
+
+.logo-image{
+  width: 100px;
+}
+
+.logo{
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  height: 100px;
-  background-color: blue;
 }
 
-.logo {
+.navbar {
   display: flex;
-  flex: 1;
-  margin-left: 30px;
-}
-.nav {
-  display: flex;
-  flex: 3;
-  justify-content: flex-end;
-  margin-right: 100px;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  margin: 0 auto;
 }
 
-.nav li {
-  width: 120px;
-  margin-left: 100px;
+.logo a {
+  font-size: 1.5em;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+  display:flex;
+  align-items: center;
+}
+
+.nav-links {
   list-style: none;
-  padding: 20px 20px;
+  display: flex;
+}
+
+.nav-links li {
+  margin-left: 20px;
+  padding:30px 20px;
+}
+
+.nav-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 2em;
+  transition: color 0.3s ease;
+}
+
+.active {
   background-color: white;
-  color: blue;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 2px 2px #000000;
+}
+
+.active a {
+  color: rgb(50,123,255); 
+}
+
+.nav-links a:hover {
+  color: #FFD700;
+}
+
+.container{
+  margin: 0 auto;
+  width: 70%;
+  height: 100vh;
+  display:flex;
+  justify-content: center;
+}
+
+
+table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 16px;
+  min-width: 400px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+thead tr {
+  background-color: rgb(50,123,255); 
+  color: #ffffff;
+  text-align: left;
+  font-weight: bold;
+}
+
+th, td {
+  padding: 12px 15px;
+}
+
+tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+tbody tr:last-of-type {
+  border-bottom: 2px solid rgb(50,123,255); 
+}
+
+tbody tr:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.analysis-section {
+  margin: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.analysis-section h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.analysis-section h2 {
+  font-size: 1.5em;
+  margin: 15px 0 10px;
+  color: #555;
+}
+
+.analysis-section h3 {
+  font-size: 1.2em;
+  margin: 10px 0;
+  color: #777;
+}
+
+.analysis-text p {
+  margin: 10px 0;
+  line-height: 1.6;
+  color: #444;
+}
+
+.analysis-text {
+  margin: 20px 0;
+  border: 1px solid #e0e0e0; /* 경계선 추가 */
+  border-radius: 8px; /* 둥근 모서리 */
+  padding: 15px; /* 여백 추가 */
+  background-color: #f9f9f9; /* 배경 색상 */
+}
+
+.analysis-text h2 {
+  font-size: 1.5em;
+  margin: 10px 0;
+  color: #007bff; /* 제목 색상 */
+  border-bottom: 2px solid #007bff; /* 제목 아래 선 추가 */
+  padding-bottom: 5px; /* 제목과 선 사이 여백 */
+}
+
+.analysis-text h3 {
+  font-size: 1.2em;
+  margin: 8px 0;
+  color: #333;
+}
+
+
+
+.analysis-text ul {
+  margin-left: 20px; /* 리스트 들여쓰기 */
+  list-style-type: disc; /* 불릿 포인트 */
+}
+
+.analysis-text ul li {
+  margin: 5px 0; /* 리스트 항목 간 여백 */
 }
