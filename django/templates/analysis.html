@@ -402,25 +402,14 @@
           <div>
             <h1>범주형 변수 vs Churn 분석 결론</h1>
             <div>
-              <h1>이탈율을 낮추기 위한 피처 조정 제안</h1>
               <div >
-        
-                <!-- Contract Section -->
                 <div class="card">
                     <h2>1. Contract (계약 유형)</h2>
                     <p>
                         <strong>분석:</strong> Month-to-month 계약 고객의 이탈율이 높고, Two year 계약을 맺은 고객의 이탈율은 매우 낮습니다.
                     </p>
-                    <p>
-                        <strong>제안:</strong> 단기 계약을 줄이고 장기 계약 비율을 늘리기 위해 장기 계약을 독려하는 정책을 도입합니다.
-                        <ul>
-                            <li>신규가입자에게 One year 또는 Two year 계약을 선택할 때 더 많은 혜택이나 할인을 제공</li>
-                            <li>기존 Month-to-month 고객에게 장기 계약 전환 시 인센티브 제공</li>
-                        </ul>
-                    </p>
                 </div>
         
-                <!-- Online Security Section -->
                 <div class="card">
                     <h2>2. OnlineSecurity (온라인 보안 서비스)</h2>
                     <p>
@@ -436,14 +425,10 @@
                     </p>
                 </div>
         
-                <!-- Other Sections Follow the Same Format -->
                 <div class="card">
                     <h2>3. TechSupport (기술 지원 서비스)</h2>
                     <p>
                         <strong>분석:</strong> No(기술 지원 서비스를 사용하지 않는 고객)의 이탈율이 높으며, Yes(기술 지원 서비스를 사용하는 고객)의 이탈율이 낮습니다.
-                    </p>
-                    <p>
-                        <strong>제안:</strong> 기술 지원 서비스 비율을 늘리기 위해, 사용하지 않는 고객에게 추가 옵션을 제공하거나 혜택을 강조합니다.
                     </p>
                 </div>
         
@@ -452,9 +437,6 @@
                     <p>
                         <strong>분석:</strong> Fiber optic 서비스를 사용하는 고객의 이탈율이 높고, DSL 서비스를 사용하는 고객의 이탈율은 상대적으로 낮습니다.
                     </p>
-                    <p>
-                        <strong>제안:</strong> Fiber optic 서비스의 품질 개선이나 가격 재검토가 필요합니다.
-                    </p>
                 </div>
         
                 <div class="card">
@@ -462,18 +444,32 @@
                     <p>
                         <strong>분석:</strong> Electronic check로 결제하는 고객의 이탈율이 높습니다.
                     </p>
-                    <p>
-                        <strong>제안:</strong> Electronic check 결제 고객에게 자동 이체나 신용카드 결제로 전환할 수 있는 혜택을 제공합니다.
-                    </p>
                 </div>
-        
-                <div class="card summary">
-                    <h2>종합적인 제안</h2>
-                    <p>장기 계약과 추가 서비스를 통해 고객 이탈율을 낮출 수 있습니다. 결제 방식과 부가 서비스(온라인 보안, 기술 지원)를 개선하는 정책을 통해 이탈율을 줄일 수 있습니다.</p>
-                </div>
+              </div>
             </div>
-             
+          </div>
+          <div>
+            <img src="{{elbow_url}}" alt="elbow" />
+            <div class="analysis-text">
+              <h2>엘보우 방법을 이용한 최적의 k값 찾기</h2>
+              <p>K =3으로 최적의 클러스터 수를 결정했습니다</p>
+            </div>  
+          </div>
+          <div>
+            <img src="{{cluster_bar_url}}" alt="cluster_bar"/>
+            <div class="analysis-text">
+              <h2>K =3 으로 클러스트링 한 결과</h2>
+              <p>클러스터링 결과, cluster 2가 위험군으로 식별되었으며
+                이탈율이 32.8%로 나타났습니다.</p>
             </div>
+          </div>
+          <div>
+            <img src="{{cluster_pca_url}}" alt="cluster_pca" />
+            <div class="analysis-text">
+              <h2>클러스터 시각화</h2>
+              <p>클러스터링 결과를 시각화하여 각 그룹의 특성을 파악할 수
+                있습니다</p>
+            </div>  
           </div>
         </div>
       </div>

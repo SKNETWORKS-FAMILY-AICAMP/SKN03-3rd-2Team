@@ -7,9 +7,14 @@ import pandas as pd
 import os
 from django.shortcuts import render
 from django.conf import settings
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 
-def analysis(request):
-    # CSV 파일 경로 설정
+
+
+def main(request):
+        # CSV 파일 경로 설정
     csv_file_path = os.path.join(settings.BASE_DIR, 'static/data/teleco-customer-churn.csv')
 
     # CSV 데이터 읽기
@@ -23,6 +28,7 @@ def analysis(request):
     numerical_df = df.select_dtypes(include=['number'])
 
     # 상관관계 함수 호출
+    image_url = analysis(df)
     corellation_url = Corellaction(df, numerical_df)
     standard_compare_url = standard_compare(df, numerical_df)
     customer_char_url = customer(df)
@@ -30,6 +36,25 @@ def analysis(request):
     additinal_service_url = additinal_service(df)
     contract_url =  contract(df)
     important_url = important(df)
+    elbow_url = cluster(df)
+    cluster_bar_url = cluster_bargraph(df)
+    cluster_pca_url = cluster_pca(df)
+
+    return render(request, 'analysis.html', 
+                {'image_url': image_url, 
+                'corellation_url': corellation_url, 
+                'standard_compare_url': standard_compare_url,
+                'customer_char_url':customer_char_url,
+                'service_url':service_url,
+                'additinal_service_url':additinal_service_url,
+                'contract_url': contract_url,
+                'important_url':important_url,
+                'elbow_url':elbow_url,
+                'cluster_bar_url': cluster_bar_url,
+                'cluster_pca_url':cluster_pca_url
+                })
+
+def analysis(df):
 
     # 이미지 생성
     plt.figure(figsize=(18, 6))
@@ -67,17 +92,7 @@ def analysis(request):
 
     # 이미지 URL 생성
     image_url = os.path.join(settings.MEDIA_URL, 'chart.png')
-    
-    return render(request, 'analysis.html', 
-                  {'image_url': image_url, 
-                   'corellation_url': corellation_url, 
-                   'standard_compare_url': standard_compare_url,
-                   'customer_char_url':customer_char_url,
-                   'service_url':service_url,
-                   'additinal_service_url':additinal_service_url,
-                   'contract_url': contract_url,
-                   'important_url':important_url
-                   })
+    return image_url
 
 
 def Corellaction(df, numerical_df):
@@ -274,4 +289,125 @@ def important(df):
 
         # 이미지 URL 생성
     image_url = os.path.join(settings.MEDIA_URL, 'important.png')
+    return image_url
+
+
+def cluster(df):
+    cluster_df = df.apply(lambda x: pd.factorize(x)[0]).drop(['customerID', 'Churn', 'Churn_numeric'], axis=1)
+    cluster_df.head()
+
+    
+    scale = StandardScaler()
+    scaled_df = pd.DataFrame(scale.fit_transform(cluster_df), columns=cluster_df.columns)
+
+
+# 정규화된 데이터 출력
+    wcss = []
+    K_range = range(1, 11)
+
+    # K 값에 따른 WCSS 계산
+    for k in K_range:
+        kmeans = KMeans(n_clusters=k, random_state=52)
+        kmeans.fit(scaled_df)
+        wcss.append(kmeans.inertia_)  # WCSS 값 저장
+
+    # 엘보우 그래프 그리기
+    plt.plot(K_range, wcss, marker='o')
+    plt.title('Elbow Method For Optimal K')
+    plt.xlabel('Number of clusters (K)')
+    plt.ylabel('WCSS')
+    plt.show()
+    
+    elbow_image_path = os.path.join(settings.MEDIA_ROOT, 'elbow_graph.png')
+    plt.savefig(elbow_image_path)
+    plt.close()
+
+        # 이미지 URL 생성
+    image_url = os.path.join(settings.MEDIA_URL, 'elbow_graph.png')
+    return image_url
+
+def cluster_bargraph(df):
+
+    cluster_df = df.apply(lambda x: pd.factorize(x)[0]).drop(['customerID', 'Churn', 'Churn_numeric'], axis=1)
+
+    scale = StandardScaler()
+    scaled_df = pd.DataFrame(scale.fit_transform(cluster_df), columns=cluster_df.columns)
+    # K = 3으로 K-means 모델 생성
+    kmeans = KMeans(n_clusters=3, random_state=52)
+
+    # 데이터를 K-means로 클러스터링
+    kmeans.fit(scaled_df)
+
+    # 각 데이터 포인트의 클러스터 할당 (레이블)
+    cluster_labels = kmeans.labels_
+
+    # 클러스터 레이블을 원본 데이터에 추가 (선택 사항)
+    scaled_df['Cluster'] = cluster_labels
+
+    # scaled_df에 원본 데이터의 'Churn' 컬럼을 추가
+    scaled_df['Churn'] = df['Churn']
+
+    # 클러스터별 Churn 비율 계산
+    churn_rate_by_cluster = scaled_df.groupby('Cluster')['Churn'].value_counts(normalize=True).unstack()
+
+
+    # 결과 출력
+    print(churn_rate_by_cluster)
+
+    # 클러스터별 Churn 비율을 바차트로 시각화
+    ax = churn_rate_by_cluster.plot(kind='bar', stacked=True, color=['skyblue', 'red'])
+
+    plt.title('Churn Rate by Cluster')
+    plt.xlabel('Cluster')
+    plt.ylabel('Proportion')
+
+    # 이탈한 고객 (Churn = 1, 빨간색 막대)
+    for i, container in enumerate(ax.containers):
+        if i == 1:
+            ax.bar_label(container, fmt='%.2f', label_type='center', color='white')
+
+    plt.show()
+    cluster_bar_image_path = os.path.join(settings.MEDIA_ROOT, 'cluster_bar_graph.png')
+    plt.savefig(cluster_bar_image_path)
+    plt.close()
+
+        # 이미지 URL 생성
+    image_url = os.path.join(settings.MEDIA_URL, 'cluster_bar_graph.png')
+    return image_url
+
+
+def cluster_pca(df):
+    cluster_df = df.apply(lambda x: pd.factorize(x)[0]).drop(['customerID', 'Churn', 'Churn_numeric'], axis=1)
+    scale = StandardScaler()
+    scaled_df = pd.DataFrame(scale.fit_transform(cluster_df), columns=cluster_df.columns)
+        
+    # K = 3으로 K-means 모델 생성
+    kmeans = KMeans(n_clusters=3, random_state=52)
+
+    # 데이터를 K-means로 클러스터링
+    kmeans.fit(scaled_df)
+
+    # 각 데이터 포인트의 클러스터 할당 (레이블)
+    cluster_labels = kmeans.labels_
+
+    # 클러스터 레이블을 원본 데이터에 추가 (선택 사항)
+    scaled_df['Cluster'] = cluster_labels
+
+    # PCA를 사용하여 2차원으로 차원 축소
+    pca = PCA(n_components=2)
+    pca_components = pca.fit_transform(scaled_df.drop(columns=['Cluster']))
+
+    # 차원 축소된 데이터를 이용해 시각화
+    plt.figure(figsize=(8, 6))
+    plt.scatter(pca_components[:, 0], pca_components[:, 1], c=scaled_df['Cluster'], cmap='viridis')
+    plt.title('K-Means Clustering with PCA (K=3)')
+    plt.xlabel('PCA Component 1')
+    plt.ylabel('PCA Component 2')
+    plt.show()
+    cluster_pca_image_path = os.path.join(settings.MEDIA_ROOT, 'cluster_pca.png')
+    plt.savefig(cluster_pca_image_path)
+    plt.close()
+
+        # 이미지 URL 생성
+    image_url = os.path.join(settings.MEDIA_URL, 'cluster_pca.png')
     return image_url
