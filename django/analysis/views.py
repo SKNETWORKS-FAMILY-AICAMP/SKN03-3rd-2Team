@@ -10,22 +10,55 @@ from django.conf import settings
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+from .models import CustomerChurn
 
+import os
+import numpy as np
+import random
+import torch
+
+def reset_seeds(seed=52):
+  random.seed(seed)
+  os.environ['PYTHONHASHSEED'] = str(seed)    # 파이썬 환경변수 시드 고정
+  np.random.seed(seed)
+  torch.manual_seed(seed) # cpu 연산 무작위 고정
+  torch.cuda.manual_seed(seed) # gpu 연산 무작위 고정
+  torch.backends.cudnn.deterministic = True  # cuda 라이브러리에서 Deterministic(결정론적)으로 예측하기 (예측에 대한 불확실성 제거 )
 
 
 def main(request):
+        # MySQL에서 데이터 가져오기
         # CSV 파일 경로 설정
     csv_file_path = os.path.join(settings.BASE_DIR, 'static/data/teleco-customer-churn.csv')
 
     # CSV 데이터 읽기
     df = pd.read_csv(csv_file_path)
+    # QuerySet을 DataFrame으로 변환
+    # df = pd.DataFrame(list(CustomerChurn.objects.all().values()))
 
+    # 데이터 출력
+    print(df.head())
+
+    df['Churn_numeric'] = df['Churn'].apply(lambda x: 1 if x == 'Yes' else 0)
+
+    
     # TotalCharges를 숫자로 변환하고 결측값 처리
     df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
-    df['TotalCharges'] = df['TotalCharges'].fillna(0)  # 결측값을 0으로 대체
-
+    mean_totalcharges = df['TotalCharges'].mean()
+    df['TotalCharges'].fillna(mean_totalcharges, inplace=True)
     # 수치형 데이터프레임 생성
     numerical_df = df.select_dtypes(include=['number'])
+
+    # 범주형으로 변환할 컬럼 리스트
+    categorical_columns = [
+        'gender', 'Partner', 'Dependents', 'SeniorCitizen', 'PhoneService', 'MultipleLines',
+        'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection',
+        'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract',
+        'PaperlessBilling', 'PaymentMethod', 'Churn'
+    ]
+
+    # 각 컬럼을 카테고리형으로 변환
+    df[categorical_columns] = df[categorical_columns].astype('category')
 
     # 상관관계 함수 호출
     image_url = analysis(df)
@@ -293,8 +326,10 @@ def important(df):
 
 
 def cluster(df):
+    reset_seeds()
     cluster_df = df.apply(lambda x: pd.factorize(x)[0]).drop(['customerID', 'Churn', 'Churn_numeric'], axis=1)
     cluster_df.head()
+
 
     
     scale = StandardScaler()
@@ -327,7 +362,8 @@ def cluster(df):
     return image_url
 
 def cluster_bargraph(df):
-
+    reset_seeds()
+    df.info()
     cluster_df = df.apply(lambda x: pd.factorize(x)[0]).drop(['customerID', 'Churn', 'Churn_numeric'], axis=1)
 
     scale = StandardScaler()
@@ -352,7 +388,7 @@ def cluster_bargraph(df):
 
 
     # 결과 출력
-    print(churn_rate_by_cluster)
+    print('churn:',churn_rate_by_cluster)
 
     # 클러스터별 Churn 비율을 바차트로 시각화
     ax = churn_rate_by_cluster.plot(kind='bar', stacked=True, color=['skyblue', 'red'])
@@ -377,6 +413,7 @@ def cluster_bargraph(df):
 
 
 def cluster_pca(df):
+    reset_seeds()
     cluster_df = df.apply(lambda x: pd.factorize(x)[0]).drop(['customerID', 'Churn', 'Churn_numeric'], axis=1)
     scale = StandardScaler()
     scaled_df = pd.DataFrame(scale.fit_transform(cluster_df), columns=cluster_df.columns)
@@ -393,8 +430,9 @@ def cluster_pca(df):
     # 클러스터 레이블을 원본 데이터에 추가 (선택 사항)
     scaled_df['Cluster'] = cluster_labels
 
+
     # PCA를 사용하여 2차원으로 차원 축소
-    pca = PCA(n_components=2)
+    pca = PCA(n_components=2, random_state=52)
     pca_components = pca.fit_transform(scaled_df.drop(columns=['Cluster']))
 
     # 차원 축소된 데이터를 이용해 시각화
@@ -403,9 +441,9 @@ def cluster_pca(df):
     plt.title('K-Means Clustering with PCA (K=3)')
     plt.xlabel('PCA Component 1')
     plt.ylabel('PCA Component 2')
-    plt.show()
     cluster_pca_image_path = os.path.join(settings.MEDIA_ROOT, 'cluster_pca.png')
     plt.savefig(cluster_pca_image_path)
+    plt.show()
     plt.close()
 
         # 이미지 URL 생성
