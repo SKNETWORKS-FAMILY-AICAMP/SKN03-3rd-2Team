@@ -27,17 +27,27 @@ def reset_seeds(seed=52):
 
 
 def main(request):
+<<<<<<< HEAD
     reset_seeds()
+=======
+>>>>>>> d2a8ce99d63bcfc4532beaae1a8625d4f1841221
         # MySQL에서 데이터 가져오기
         # CSV 파일 경로 설정
     csv_file_path = os.path.join(settings.BASE_DIR, 'static/data/teleco-customer-churn.csv')
 
     # CSV 데이터 읽기
     df = pd.read_csv(csv_file_path)
+    # QuerySet을 DataFrame으로 변환
+    # df = pd.DataFrame(list(CustomerChurn.objects.all().values()))
 
+<<<<<<< HEAD
     print(df.shape)
     # QuerySet을 DataFrame으로 변환
     # df = pd.DataFrame(list(CustomerChurn.objects.all().values()))
+=======
+    # 데이터 출력
+    print(df.head())
+>>>>>>> d2a8ce99d63bcfc4532beaae1a8625d4f1841221
 
     df['Churn_numeric'] = df['Churn'].apply(lambda x: 1 if x == 'Yes' else 0)
 
@@ -325,8 +335,16 @@ def important(df):
 
 
 def cluster(df):
+<<<<<<< HEAD
     cluster_df = df.apply(lambda x: pd.factorize(x)[0]).drop(['customerID', 'Churn', 'Churn_numeric'], axis=1)
     cluster_df.head()
+=======
+    reset_seeds()
+    cluster_df = df.apply(lambda x: pd.factorize(x)[0]).drop(['customerID', 'Churn', 'Churn_numeric'], axis=1)
+    cluster_df.head()
+
+
+>>>>>>> d2a8ce99d63bcfc4532beaae1a8625d4f1841221
     
     scale = StandardScaler()
     scaled_df = pd.DataFrame(scale.fit_transform(cluster_df), columns=cluster_df.columns)
@@ -384,6 +402,10 @@ def cluster_bargraph(df):
 
 
     # 결과 출력
+<<<<<<< HEAD
+=======
+    print('churn:',churn_rate_by_cluster)
+>>>>>>> d2a8ce99d63bcfc4532beaae1a8625d4f1841221
 
     # 클러스터별 Churn 비율을 바차트로 시각화
     ax = churn_rate_by_cluster.plot(kind='bar', stacked=True, color=['skyblue', 'red'])
@@ -408,6 +430,10 @@ def cluster_bargraph(df):
 
 
 def cluster_pca(df):
+<<<<<<< HEAD
+=======
+    reset_seeds()
+>>>>>>> d2a8ce99d63bcfc4532beaae1a8625d4f1841221
     cluster_df = df.apply(lambda x: pd.factorize(x)[0]).drop(['customerID', 'Churn', 'Churn_numeric'], axis=1)
     scale = StandardScaler()
     scaled_df = pd.DataFrame(scale.fit_transform(cluster_df), columns=cluster_df.columns)
