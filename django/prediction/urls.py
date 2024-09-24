@@ -1,7 +1,7 @@
-
 from django.urls import path
-from .views import prediction
+from .views import main_view, more_view
 
 urlpatterns = [
-    path('', prediction, name="prediction"),
+    path("", main_view, name="prediction"),
+    path("more/", more_view, name="more_prediction"),
 ]

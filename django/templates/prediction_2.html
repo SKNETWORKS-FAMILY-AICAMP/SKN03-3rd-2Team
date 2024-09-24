@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% block content %}
+    <link rel="stylesheet" href="{% static 'css/prediction.css' %}">
+    {% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div>
+        <header>
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="/">
+                        <img class="logo-image" src="{% static 'img/logo.png' %}" />
+                        <h2>텔레핑</h2>
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li class="{% if request.path == '/' %}active{% endif %}">
+                        <a href="/">Home</a>
+                    </li>
+                    <li class="{% if request.path == '/analysis/' %}active{% endif %}">
+                        <a href="/analysis">Analysis</a>
+                    </li>
+                    <li class="{% if request.path == '/prediction' %}active{% endif %}">
+                        <a href="/prediction">Prediction</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <div class="container">
+            <div class="predict-text">
+                <h1 class="title">이탈 방지 전략에 따른 데이터 수정 2</h1>
+                <h2>[온라인 보안 서비스 • 기술 지원 서비스]</h2>
+                <strong>Fiber optic 사용자의 월 요금 15% 할인</strong>
+                <p>✅ Fiber optic 인터넷 서비스를 사용하는 고객에게 15% 할인을 적용</p>
+                <strong>온라인 보안 서비스 미사용 고객 중 20%에게 보안 제공 (No -> Yes)</strong>
+                <p>✅ 온라인 보안 서비스를 사용하지 않는 고객의 20%를 무작위로 선택하여 보안 서비스를 제공</p>
+                <strong>온라인 백업 및 기기 보호 미사용 고객 중 20%에게 두 서비스 제공 (No -> Yes)</strong>
+                <p>✅ 온라인 백업과 기기 보호 서비스를 모두 사용하지 않는 고객의 20%를 무작위로 선택하여 두 서비스를 제공</p>
+                <strong>기술 지원 미사용 고객 중 20%에게 기술 지원 제공 (No -> Yes)</strong>
+                <p>✅ 기술 지원을 사용하지 않는 고객의 20%를 무작위로 선택하여 기술 지원 제공</p>
+                </p>
+                <h2>[가입 기간]</h2>
+                <strong>월 단위 계약 고객 중 20%를 1년 계약으로 전환</strong>
+                <p>🎁 월 단위 계약 고객의 20%를 무작위로 선택하여 1년 계약으로 전환</p>
+                <strong>장기고객(24개월 이상) 대상 월 요금 15% 할인 혜택</strong>
+                <p>〽️ 가입 기간이 24개월 이상인 고객에게 15% 할인 적용</p>
+                <strong>신규 고객(6개월 이하) 대상 월 요금 20% 할인 혜택</strong>
+                <p>〽️ 가입 기간이 6개월 이하인 신규 고객에게 20% 할인 적용</p>
+                <strong>가입 기간이 12개월 이하 + 월 납부액이 높은 고객 대상 요금 15% 할인 혜택</strong>
+                <p>〽️ 가입 기간 12개월 이하, 월 요금이 중앙값보다 높은 고객에게 15% 할인 적용</p>
+                <h2>[결제 방식]</h2>
+                <strong>전자 수표를 사용하는 고객 중 20%를 신용카드/자동이체로 전환</strong>
+                <p>💳  전자 수표 결제 이용 고객의 20%를 무작위로 선택하여 신용 카드(자동) / 은행 이체(자동)로 전환</p>
+                
+            </div>
+            <div class="analysis-section">
+                <h2>원본 데이터 예측값 비율</h2>
+                <div>
+                    <img src="{{ Donut_image_url_origin }}" alt="Donut Chart">
+                </div>
+                <h2>두 번째 수정 데이터 예측값 비율</h2>
+                <div>
+                    <img src="{{ Donut_image_url_2 }}" alt="Donut Chart">
+                </div>                
+            </div>
+        </div>
+        <div class="button-container">
+            <a href="{% url 'prediction' %}" class="navigate-button">🔍 첫 번째 예측 Click!</a>
+        </div>
+    </div>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div>
+        <header>
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="/">
+                        <img class="logo-image" src="{% static 'img/logo.png' %}" />
+                        <h2>텔레핑</h2>
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li class="{% if request.path == '/' %}active{% endif %}">
+                        <a href="/">Home</a>
+                    </li>
+                    <li class="{% if request.path == '/analysis/' %}active{% endif %}">
+                        <a href="/analysis">Analysis</a>
+                    </li>
+                    <li class="{% if request.path == '/prediction' %}active{% endif %}">
+                        <a href="/prediction">Prediction</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <div class="container">
+            <h2>Confusion Matrix</h2>
+            <div>
+                <img src="{{ confusion_matrix_image_url }}" alt="Confusion Matrix">
+            </div>
+            <h2>ROC Curve</h2>
+            <div>
+                <img src="{{ roc_curve_image_url }}" alt="ROC Curve">
+            </div>
+            <h2>Evaluation Metrics</h2>
+            <p>ROC AUC: {{ roc_auc }}</p>
+            <p>F1 Score: {{ f1_score }}</p>
+        </div>
+    </div>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    {%load static%}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <script src="
+    https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js
+    "></script>
+  </head>
+  <body>
+    <div>
+      <header>
+        <nav class="navbar">
+          <div class="logo">
+            <a href="/">
+              <img class="logo-image" src="{% static 'img/logo.png' %}" />
+              <h2>텔레핑</h2>
+            </a>
+          </div>
+          <ul class="nav-links">
+            <li class="{% if request.path == '/' %}active{% endif %}">
+              <a href="/">Home</a>
+            </li>
+            <li class="{% if request.path == '/analysis/' %}active{% endif %}">
+              <a href="/analysis">Analysis</a>
+            </li>
+            <li class="{% if request.path == '/prediction' %}active{% endif %}">
+              <a href="/prediction">Prediction</a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <div class="container"></div>
+      <h2>Confusion Matrix</h2>
+    </div>
+    <div>
+      <img src="{{ confusion_matrix_image_url }}" alt="Confusion Matrix">
+    </div>
+    <h2>ROC Curve</h2>
+    <div>
+        <img src="{{ roc_curve_image_url }}" alt="ROC Curve">
+    </div>
+    <h2>Evaluation Metrics</h2>
+    <p>ROC AUC: {{ roc_auc }}</p>
+    <p>F1 Score: {{ f1_score }}</p>
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html> -->
+
