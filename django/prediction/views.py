@@ -11,6 +11,17 @@ from django.shortcuts import render
 from django.conf import settings
 from sklearn.pipeline import Pipeline
 import numpy as np
+from prediction.transformers import (
+    DataCleaning,
+    FeatureEngineering,
+    ScaleAndTransform,
+    FeatureSelection,
+    CorrelationFilter,
+)
+
+
+# First, define the classes in the current module where joblib expects to find them
+import sys
 
 
 # 데이터 로드 및 전처리 함수
@@ -22,7 +33,7 @@ def load_data(num):
         df2 = pd.read_csv(
             os.path.join(
                 settings.BASE_DIR,
-                "static/data/transformed_modified_telco_customer_data_1.csv",
+                "static/data/modified_telco_customer_data_1.csv",
             )
         )
     else:
@@ -36,6 +47,13 @@ def load_data(num):
 
 
 def main_view(request):
+
+    # For example, patch the __main__ module if it’s searching for the classes there
+    sys.modules["__main__"].DataCleaning = DataCleaning
+    sys.modules["__main__"].FeatureEngineering = FeatureEngineering
+    sys.modules["__main__"].ScaleAndTransform = ScaleAndTransform
+    sys.modules["__main__"].FeatureSelection = FeatureSelection
+    sys.modules["__main__"].CorrelationFilter = CorrelationFilter
 
     # 데이터 로드 및 전처리
     df, df2 = load_data(1)
