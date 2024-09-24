@@ -12,7 +12,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from .models import CustomerChurn
 
-import os
 import numpy as np
 import random
 import torch
