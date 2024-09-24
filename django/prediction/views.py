@@ -19,7 +19,6 @@ from prediction.transformers import (
     CorrelationFilter,
 )
 
-
 # First, define the classes in the current module where joblib expects to find them
 import sys
 
@@ -77,7 +76,7 @@ def main_view(request):
     fig.set_facecolor("white")
     ax = fig.add_subplot()
     pie = ax.pie(
-        [y_No, y_Yes],  # <- 위 변수로 수정
+        [y_No, y_Yes],
         startangle=90,
         counterclock=False,
         autopct=lambda p: "{:.2f}%".format(p),
@@ -150,7 +149,7 @@ def more_view(request):
     fig.set_facecolor("white")
     ax = fig.add_subplot()
     pie = ax.pie(
-        [y_No, y_Yes],  # <- 위 변수로 수정
+        [y_No, y_Yes],
         startangle=90,
         counterclock=False,
         autopct=lambda p: "{:.2f}%".format(p),
