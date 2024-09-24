@@ -1,5 +1,6 @@
 import matplotlib
-matplotlib.use('Agg')  # Agg 백엔드 사용
+
+matplotlib.use("Agg")  # Agg 백엔드 사용
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -8,8 +9,24 @@ import joblib
 from django.shortcuts import render
 from django.conf import settings
 from sklearn.metrics import confusion_matrix, roc_auc_score, f1_score, roc_curve
-from sklearn.metrics import accuracy_score, precision_score, recall_score, precision_recall_curve, auc  # 임포트 추가
-from .train_and_save_model import train_and_save_model
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from main.transformers import (
+    DataCleaning,
+    FeatureEngineering,
+    ScaleAndTransform,
+)  # 임포트 추가
+import numpy as np
+
+
+# 데이터 로드 및 전처리 함수
+def load_and_preprocess_data():
+    df = pd.read_csv(
+        os.path.join(settings.BASE_DIR, "static/data/teleco-customer-churn.csv")
+    )
+    # 데이터 전처리 로직 추가
+    return df
+
 
 def main_view(request):
     # 모델 로드
@@ -45,26 +62,28 @@ def main_view(request):
 
     # 혼동 행렬 시각화
     plt.figure(figsize=(10, 7))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
-    plt.xlabel('Predicted')
-    plt.ylabel('Actual')
-    plt.title('Confusion Matrix')
-    confusion_matrix_image_path = os.path.join(settings.MEDIA_ROOT, 'confusion_matrix.png')
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.title("Confusion Matrix")
+    confusion_matrix_image_path = os.path.join(
+        settings.MEDIA_ROOT, "confusion_matrix.png"
+    )
     plt.savefig(confusion_matrix_image_path)
     plt.close()
 
     # ROC 곡선 시각화
     fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
     plt.figure(figsize=(10, 7))
-    plt.plot(fpr, tpr, color='blue', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
-    plt.plot([0, 1], [0, 1], color='gray', lw=2, linestyle='--')
+    plt.plot(fpr, tpr, color="blue", lw=2, label=f"ROC curve (area = {roc_auc:.2f})")
+    plt.plot([0, 1], [0, 1], color="gray", lw=2, linestyle="--")
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic (ROC) Curve')
+    plt.xlabel("False Positive Rate")
+    plt.ylabel("True Positive Rate")
+    plt.title("Receiver Operating Characteristic (ROC) Curve")
     plt.legend(loc="lower right")
-    roc_curve_image_path = os.path.join(settings.MEDIA_ROOT, 'roc_curve.png')
+    roc_curve_image_path = os.path.join(settings.MEDIA_ROOT, "roc_curve.png")
     plt.savefig(roc_curve_image_path)
     plt.close()
 
