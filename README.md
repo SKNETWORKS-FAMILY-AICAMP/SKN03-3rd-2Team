@@ -67,6 +67,9 @@
 - **📈 고객 유지 캠페인 최적화 📈**: 이탈 방지를 위한 유지 캠페인을 효과적으로 운영할 수 있도록, 다양한 고객 그룹에 맞춘 <br>
 마케팅 캠페인과 서비스 개선을 추천합니다.
 
+## 2. 아키텍처
+![ping](https://github.com/user-attachments/assets/9ff2762d-8a0d-48bd-9365-cf9171cba468)
+
 ## 3. 주요 분석 내용 
    ### 1. 전체 데이터 확인 및 타겟 데이터분석
    -**연속형 데이터**: 가입기간, 월 청구금액, 총 청구금액으로 구성
@@ -154,9 +157,40 @@
 
 #### 1. **DataCleaning**:
 - **역할** : 데이터 클리닝 (결측치 처리, 이상치 제거, 범주형 변환).
+```python
+class DataCleaning(BaseEstimator, TransformerMixin):
+    def fit(self, X, y=None):
+        return self
 
+    def transform(self, X):
+        # 데이터를 수정 가능하게 복사
+        X = X.copy()
+
+        # TotalCharges를 숫자형으로 변환
+        X['TotalCharges'] = pd.to_numeric(X['TotalCharges'], errors='coerce')
+        # SeniorCitizen을 범주형으로 변환
+        X['SeniorCitizen'] = X['SeniorCitizen'].astype('category')
+
+        # IQR 계산 및 이상치 처리
+        Q1 = X[['MonthlyCharges', 'TotalCharges']].quantile(0.25)
+        Q3 = X[['MonthlyCharges', 'TotalCharges']].quantile(0.75)
+        IQR = Q3 - Q1
+        lower_bound = Q1 - 1.5 * IQR
+        upper_bound = Q3 + 1.5 * IQR
+        X['TotalCharges'].fillna(X['TotalCharges'].median(), inplace=True) # => 0으로
+
+        X['MonthlyCharges'] = X['MonthlyCharges'].clip(lower=lower_bound['MonthlyCharges'], upper=upper_bound['MonthlyCharges'])
+        X['TotalCharges'] = X['TotalCharges'].clip(lower=lower_bound['TotalCharges'], upper=upper_bound['TotalCharges'])
+
+        # customerID 열 제거
+        if 'customerID' in X.columns:
+            X = X.drop(columns=['customerID'])
+
+        return X
+```
 #### 2. **FeatureEngineering**:
 - **역할** : 다양한 피처 생성 (고객 유형, 계약 정보, 요금 관련 피처 등) - 유의미한 피처 45개.
+
 
 #### 3. **ScaleAndTransform**:
 - **역할** : 수치형 데이터 스케일링 및 다항 피처 생성, 범주형 데이터 인코딩.
@@ -165,6 +199,44 @@
  - 2차 다항식 변환을 통한 피처 생성
 - 범주형
  - 범주형 데이터 인코딩
+
+```python
+class ScaleAndTransform(BaseEstimator, TransformerMixin):
+    def __init__(self, degree=2):
+        self.degree = degree
+        self.preprocessor = None
+
+    def fit(self, X, y=None):
+        X = X.copy()
+
+        continuous_features = X.select_dtypes(include=[np.number]).columns.tolist()
+        categorical_features = X.select_dtypes(include=['object', 'category']).columns.tolist()
+
+        numerical_pipeline = Pipeline([
+            ('scaler', MinMaxScaler()),
+            ('poly', PolynomialFeatures(degree=self.degree, interaction_only=False, include_bias=False))
+        ])
+
+        self.preprocessor = ColumnTransformer(
+            transformers=[
+                ('num', numerical_pipeline, continuous_features),
+                ('cat', OneHotEncoder(drop='first', sparse_output=False, handle_unknown='ignore'), categorical_features)
+            ]
+        )
+
+        self.preprocessor.fit(X)
+        return self
+
+    def transform(self, X):
+        X = X.copy()
+        X_processed = self.preprocessor.transform(X)
+        feature_names = self.preprocessor.get_feature_names_out()
+        feature_names = [name.replace(" ", "_") for name in feature_names]
+        if X_processed.shape[1] != len(feature_names):
+            raise ValueError("변환된 데이터의 열 개수와 피처 이름의 개수가 일치하지 않습니다.")
+
+        return pd.DataFrame(X_processed, columns=feature_names)
+```
 
 #### 4. **CorrelationFilter**:
 - **역할** : 상관관계가 높은 피처를 필터링하여 다중공선성 문제 해결, 기존 피처와 PolynomialFeatures를 사용하여 새로운 피처의 혼동 문제 해결
@@ -177,6 +249,28 @@
  - 중요도가 높은 상위 K개의 피처를 선택(파이프라인에서 설정)
    - 엄선된 노가다를 통한 135개의 피처 선택
  - 선택된 피처로 구성된 데이터셋 생성
+
+```python
+class SelectKBestWithNames(BaseEstimator, TransformerMixin):
+    def __init__(self, score_func=f_classif, k=10):
+        self.k = k
+        self.score_func = score_func
+        self.selector = SelectKBest(score_func=self.score_func, k=self.k)
+        self.selected_features_ = None
+
+    def fit(self, X, y):
+        self.selector.fit(X, y)
+        if isinstance(X, pd.DataFrame):
+            self.feature_names_in_ = X.columns
+        else:
+            self.feature_names_in_ = np.arange(X.shape[1])
+        self.selected_features_ = self.feature_names_in_[self.selector.get_support()]
+        return self
+
+    def transform(self, X):
+        X_transformed = self.selector.transform(X)
+        return pd.DataFrame(X_transformed, columns=self.selected_features_)
+```
 
 해당 파이프라인을 통해 교차검증 Fold 10개 중 공통으로 선택된 피처들을 최종 선택하여 최종 파이프라인에서 사용
 
