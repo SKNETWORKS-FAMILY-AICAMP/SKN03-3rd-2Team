@@ -152,7 +152,7 @@ tbody tr:hover {
 }
 
 .analysis-text p, .analysis-text ul {
-  font-size: 10em; /* 글씨체 크기 조정 */
+  font-size: 1.1em; /* 글씨체 크기 조정 */
 }
 
 .analysis-text h2 {

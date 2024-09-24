@@ -3,6 +3,7 @@ import matplotlib
 matplotlib.use("Agg")  # Agg 백엔드 사용
 
 import matplotlib.pyplot as plt
+import numpy as np
 import seaborn as sns
 import os
 import joblib
@@ -44,6 +45,17 @@ def main_view(request):
 
     # 혼동 행렬 계산
     cm = confusion_matrix(y_test, y_pred)
+
+    # 정규화된 혼동 행렬 계산 및 시각화 추가
+    norm_conf_mx = confusion_matrix(y_test, y_pred, normalize="true")
+    plt.figure(figsize=(7, 5))
+    sns.heatmap(norm_conf_mx, annot=True, cmap="coolwarm", linewidth=0.5)
+    plt.xlabel('Predicted')
+    plt.ylabel('Actual')
+    plt.title('Normalized Confusion Matrix')
+    norm_confusion_matrix_image_path = os.path.join(settings.MEDIA_ROOT, 'norm_confusion_matrix.png')
+    plt.savefig(norm_confusion_matrix_image_path)
+    plt.close()
 
     # ROC AUC 계산
     roc_auc = roc_auc_score(y_test, y_pred_proba)
@@ -98,15 +110,36 @@ def main_view(request):
     plt.savefig(pr_curve_image_path)
     plt.close()
 
+    # 소프트맥스 함수(Softmax Function)
+    def softmax(x):
+        e_x = np.exp(x - np.max(x))
+        return e_x / e_x.sum(axis=0)
+
+    softmax_probs = softmax(y_pred_proba)
+
+    plt.figure(figsize=(10, 7))
+    plt.hist(softmax_probs, bins=50, color='blue', alpha=0.7)
+    plt.xlabel('Softmax Probability')
+    plt.ylabel('Frequency')
+    plt.title('Softmax Probability Distribution')
+    softmax_image_path = os.path.join(settings.MEDIA_ROOT, 'softmax_distribution.png')
+    plt.savefig(softmax_image_path)
+    plt.close()
+
+
     # 이미지 URL 생성
     confusion_matrix_image_url = os.path.join(settings.MEDIA_URL, 'confusion_matrix.png')
+    norm_confusion_matrix_image_url = os.path.join(settings.MEDIA_URL, 'norm_confusion_matrix.png')
     roc_curve_image_url = os.path.join(settings.MEDIA_URL, 'roc_curve.png')
     pr_curve_image_url = os.path.join(settings.MEDIA_URL, 'pr_curve.png')
+    softmax_image_url = os.path.join(settings.MEDIA_URL, 'softmax_distribution.png')  
 
     return render(request, 'main.html', {
         'confusion_matrix_image_url': confusion_matrix_image_url,
+        'norm_confusion_matrix_image_url': norm_confusion_matrix_image_url,
         'roc_curve_image_url': roc_curve_image_url,
         'pr_curve_image_url': pr_curve_image_url,
+        'softmax_image_url': softmax_image_url,
         'roc_auc': roc_auc,
         'f1_score': f1,
         'accuracy': accuracy,
@@ -114,4 +147,3 @@ def main_view(request):
         'recall': recall,
         'pr_auc': pr_auc
     })
-
