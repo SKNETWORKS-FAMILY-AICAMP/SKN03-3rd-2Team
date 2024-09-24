@@ -1,5 +1,6 @@
 import matplotlib
 matplotlib.use('Agg')  # Agg 백엔드 사용
+import pandas as pd
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,27 +11,50 @@ from django.shortcuts import render
 from django.conf import settings
 from sklearn.metrics import confusion_matrix, roc_auc_score, f1_score, roc_curve
 from sklearn.metrics import accuracy_score, precision_score, recall_score, precision_recall_curve, auc  # 임포트 추가
-from .train_and_save_model import train_and_save_model
+import sys
+from prediction.transformers import (
+    DataCleaning,
+    FeatureEngineering,
+    ScaleAndTransform,
+    FeatureSelection,
+    CorrelationFilter,
+)
 
 def main_view(request):
     # 모델 로드
-    train_and_save_model()
-    model_path = os.path.join(settings.BASE_DIR, 'static', 'pkl', 'HistGradientBoostingClassifier.pkl')
+    sys.modules["__main__"].DataCleaning = DataCleaning
+    sys.modules["__main__"].FeatureEngineering = FeatureEngineering
+    sys.modules["__main__"].ScaleAndTransform = ScaleAndTransform
+    sys.modules["__main__"].FeatureSelection = FeatureSelection
+    sys.modules["__main__"].CorrelationFilter = CorrelationFilter
+    model_path = os.path.join(settings.BASE_DIR, 'static', 'pkl', 'CatBoost.pkl')
     model = joblib.load(model_path)
 
+
+    def convert_churn_to_binary(df):
+        df['Churn'] = df['Churn'].map({'Yes': 1, 'No': 0})
+        return df
+    
+
     # 데이터 로드
-    data_path = os.path.join(settings.BASE_DIR, 'static', 'pkl', 'data.pkl')
-    X_test_transformed, y_test = joblib.load(data_path)
+    df = pd.read_csv(
+        os.path.join(settings.BASE_DIR, "static/data/teleco-customer-churn.csv")
+    )
+        
+    df = convert_churn_to_binary(df)
+    X = df.drop(columns=['Churn'])
+    y = df['Churn']  # 타겟 변수는 Churn
+
 
     # 예측 값 생성
-    y_pred = model.predict(X_test_transformed)
-    y_pred_proba = model.predict_proba(X_test_transformed)[:, 1]
+    y_pred = model.predict(X)
+    y_pred_proba = model.predict_proba(X)[:, 1]
 
     # 혼동 행렬 계산
-    cm = confusion_matrix(y_test, y_pred)
+    cm = confusion_matrix(y, y_pred)
 
     # 정규화된 혼동 행렬 계산 및 시각화 추가
-    norm_conf_mx = confusion_matrix(y_test, y_pred, normalize="true")
+    norm_conf_mx = confusion_matrix(y, y_pred, normalize="true")
     plt.figure(figsize=(7, 5))
     sns.heatmap(norm_conf_mx, annot=True, cmap="coolwarm", linewidth=0.5)
     plt.xlabel('Predicted')
@@ -41,18 +65,18 @@ def main_view(request):
     plt.close()
 
     # ROC AUC 계산
-    roc_auc = roc_auc_score(y_test, y_pred_proba)
+    roc_auc = roc_auc_score(y, y_pred_proba)
 
     # F1 스코어 계산
-    f1 = f1_score(y_test, y_pred)
+    f1 = f1_score(y, y_pred)
 
     # 추가 평가지표 계산
-    accuracy = accuracy_score(y_test, y_pred)
-    precision = precision_score(y_test, y_pred)
-    recall = recall_score(y_test, y_pred)
+    accuracy = accuracy_score(y, y_pred)
+    precision = precision_score(y, y_pred)
+    recall = recall_score(y, y_pred)
 
     # Precision-Recall 곡선 및 AUC 계산
-    precision_vals, recall_vals, _ = precision_recall_curve(y_test, y_pred_proba)
+    precision_vals, recall_vals, _ = precision_recall_curve(y, y_pred_proba)
     pr_auc = auc(recall_vals, precision_vals)
 
     # 혼동 행렬 시각화
@@ -66,7 +90,7 @@ def main_view(request):
     plt.close()
 
     # ROC 곡선 시각화
-    fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
+    fpr, tpr, _ = roc_curve(y, y_pred_proba)
     plt.figure(figsize=(10, 7))
     plt.plot(fpr, tpr, color='blue', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
     plt.plot([0, 1], [0, 1], color='gray', lw=2, linestyle='--')

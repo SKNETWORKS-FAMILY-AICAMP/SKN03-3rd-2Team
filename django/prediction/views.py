@@ -19,6 +19,9 @@ from prediction.transformers import (
     CorrelationFilter,
 )
 
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+
 # First, define the classes in the current module where joblib expects to find them
 import sys
 
