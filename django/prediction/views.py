@@ -19,7 +19,6 @@ from prediction.transformers import (
     CorrelationFilter,
 )
 
-
 # First, define the classes in the current module where joblib expects to find them
 import sys
 
@@ -77,7 +76,7 @@ def main_view(request):
     fig.set_facecolor("white")
     ax = fig.add_subplot()
     pie = ax.pie(
-        [y_No, y_Yes],  # <- 위 변수로 수정
+        [y_No, y_Yes],
         startangle=90,
         counterclock=False,
         autopct=lambda p: "{:.2f}%".format(p),
@@ -121,15 +120,20 @@ def main_view(request):
 
 def more_view(request):
 
+    # For example, patch the __main__ module if it’s searching for the classes there
+    sys.modules["__main__"].DataCleaning = DataCleaning
+    sys.modules["__main__"].FeatureEngineering = FeatureEngineering
+    sys.modules["__main__"].ScaleAndTransform = ScaleAndTransform
+    sys.modules["__main__"].FeatureSelection = FeatureSelection
+    sys.modules["__main__"].CorrelationFilter = CorrelationFilter
+
     # 데이터 로드 및 전처리
     df, df2 = load_data(2)
 
     y = df["Churn"].apply(lambda x: 1 if x == "Yes" else 0)
 
     # 모델 로드
-    model_path = os.path.join(
-        settings.BASE_DIR, "static", "pkl", "HistGradientBoostingClassifier.pkl"
-    )
+    model_path = os.path.join(settings.BASE_DIR, "static", "pkl", "CatBoost.pkl")
     model = joblib.load(model_path)
 
     # 예측 값 생성
@@ -145,7 +149,7 @@ def more_view(request):
     fig.set_facecolor("white")
     ax = fig.add_subplot()
     pie = ax.pie(
-        [y_No, y_Yes],  # <- 위 변수로 수정
+        [y_No, y_Yes],
         startangle=90,
         counterclock=False,
         autopct=lambda p: "{:.2f}%".format(p),
@@ -176,6 +180,9 @@ def more_view(request):
 
     Donut_image_url_origin = os.path.join(settings.MEDIA_URL, "Donut_chart_origin.png")
     Donut_image_url_2 = os.path.join(settings.MEDIA_URL, "Donut_chart_2.png")
+
+    Donut_image_url_origin = os.path.join(settings.MEDIA_URL, "Donut_chart_origin.png")
+    Donut_image_url = os.path.join(settings.MEDIA_URL, "Donut_chart_1.png")
 
     return render(
         request,
