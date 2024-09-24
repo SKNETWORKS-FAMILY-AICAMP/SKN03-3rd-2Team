@@ -9,13 +9,12 @@ import pandas as pd
 from django.shortcuts import render
 from django.conf import settings
 from sklearn.metrics import confusion_matrix, roc_auc_score, f1_score, roc_curve
-from sklearn.metrics import accuracy_score, precision_score, recall_score, precision_recall_curve, auc
-from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
-from main.transformers import DataCleaning, FeatureEngineering, ScaleAndTransform
+from sklearn.metrics import accuracy_score, precision_score, recall_score, precision_recall_curve, auc  # 임포트 추가
+from .train_and_save_model import train_and_save_model
 
 def main_view(request):
     # 모델 로드
+    train_and_save_model()
     model_path = os.path.join(settings.BASE_DIR, 'static', 'pkl', 'HistGradientBoostingClassifier.pkl')
     model = joblib.load(model_path)
 

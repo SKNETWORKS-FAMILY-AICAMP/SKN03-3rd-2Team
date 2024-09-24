@@ -402,25 +402,14 @@
           <div>
             <h1>범주형 변수 vs Churn 분석 결론</h1>
             <div>
-              <h1>이탈율을 낮추기 위한 피처 조정 제안</h1>
               <div >
-        
-                <!-- Contract Section -->
                 <div class="card">
                     <h2>1. Contract (계약 유형)</h2>
                     <p>
                         <strong>분석:</strong> Month-to-month 계약 고객의 이탈율이 높고, Two year 계약을 맺은 고객의 이탈율은 매우 낮습니다.
                     </p>
-                    <p>
-                        <strong>제안:</strong> 단기 계약을 줄이고 장기 계약 비율을 늘리기 위해 장기 계약을 독려하는 정책을 도입합니다.
-                        <ul>
-                            <li>신규가입자에게 One year 또는 Two year 계약을 선택할 때 더 많은 혜택이나 할인을 제공</li>
-                            <li>기존 Month-to-month 고객에게 장기 계약 전환 시 인센티브 제공</li>
-                        </ul>
-                    </p>
                 </div>
         
-                <!-- Online Security Section -->
                 <div class="card">
                     <h2>2. OnlineSecurity (온라인 보안 서비스)</h2>
                     <p>
@@ -436,14 +425,10 @@
                     </p>
                 </div>
         
-                <!-- Other Sections Follow the Same Format -->
                 <div class="card">
                     <h2>3. TechSupport (기술 지원 서비스)</h2>
                     <p>
                         <strong>분석:</strong> No(기술 지원 서비스를 사용하지 않는 고객)의 이탈율이 높으며, Yes(기술 지원 서비스를 사용하는 고객)의 이탈율이 낮습니다.
-                    </p>
-                    <p>
-                        <strong>제안:</strong> 기술 지원 서비스 비율을 늘리기 위해, 사용하지 않는 고객에게 추가 옵션을 제공하거나 혜택을 강조합니다.
                     </p>
                 </div>
         
@@ -452,9 +437,6 @@
                     <p>
                         <strong>분석:</strong> Fiber optic 서비스를 사용하는 고객의 이탈율이 높고, DSL 서비스를 사용하는 고객의 이탈율은 상대적으로 낮습니다.
                     </p>
-                    <p>
-                        <strong>제안:</strong> Fiber optic 서비스의 품질 개선이나 가격 재검토가 필요합니다.
-                    </p>
                 </div>
         
                 <div class="card">
@@ -462,20 +444,143 @@
                     <p>
                         <strong>분석:</strong> Electronic check로 결제하는 고객의 이탈율이 높습니다.
                     </p>
-                    <p>
-                        <strong>제안:</strong> Electronic check 결제 고객에게 자동 이체나 신용카드 결제로 전환할 수 있는 혜택을 제공합니다.
-                    </p>
                 </div>
-        
-                <div class="card summary">
-                    <h2>종합적인 제안</h2>
-                    <p>장기 계약과 추가 서비스를 통해 고객 이탈율을 낮출 수 있습니다. 결제 방식과 부가 서비스(온라인 보안, 기술 지원)를 개선하는 정책을 통해 이탈율을 줄일 수 있습니다.</p>
-                </div>
-            </div>
-             
+              </div>
             </div>
           </div>
-        </div>
+          <div>
+            <img src="{{elbow_url}}" alt="elbow" />
+            <div class="analysis-text">
+              <h2>엘보우 방법을 이용한 최적의 k값 찾기</h2>
+              <p>K =3으로 최적의 클러스터 수를 결정했습니다</p>
+            </div>  
+          </div>
+          <div>
+            <img src="{{cluster_bar_url}}" alt="cluster_bar"/>
+            <div class="analysis-text">
+              <h2>K =3 으로 클러스트링 한 결과</h2>
+              <p>클러스터링 결과, cluster 2가 위험군으로 식별되었으며
+                이탈율이 32.8%로 나타났습니다.</p>
+            </div>
+          </div>
+          <div>
+            <img src="{{cluster_pca_url}}" alt="cluster_pca" />
+            <div class="analysis-text">
+              <h2>클러스터 시각화</h2>
+              <p>클러스터링 결과를 시각화하여 각 그룹의 특성을 파악할 수
+                있습니다</p>
+            </div>  
+          </div>
+          <div>
+            <div>
+              <div class="card">
+                <h2>클러스터 2 분석 결과 및 결론</h2>
+                <p><strong>범주형 컬럼 분석:</strong></p>
+                <ul>
+                  <li><strong>인터넷 서비스 (InternetService):</strong> 64.0%의 고객이 Fiber optic을 사용하고 있으며, 나머지 36.0%는 DSL을 사용 중입니다.</li>
+                  <li><strong>온라인 보안 (OnlineSecurity):</strong> 64.1%의 고객이 온라인 보안을 사용하지 않습니다.</li>
+                  <li><strong>온라인 백업 (OnlineBackup):</strong> 55.7%의 고객이 온라인 백업 서비스를 사용하지 않습니다.</li>
+                  <li><strong>기기 보호 (DeviceProtection):</strong> 56.2%의 고객이 기기 보호 서비스를 사용하지 않습니다.</li>
+                  <li><strong>월 요금 (MonthlyCharges):</strong> 월 평균 요금이 81.76달러로, 비교적 높은 요금제를 사용하는 고객들이 포함되어 있습니다.</li>
+                  <li><strong>총 지출 (TotalCharges):</strong> 평균 총 지출이 2902.09달러로, 기존 고객으로서 상당한 지출을 한 상태입니다.</li>
+                  <li><strong>기술 지원 (TechSupport):</strong> 63.7%의 고객이 기술 지원 서비스를 사용하지 않습니다.</li>
+                  <li><strong>계약 유형 (Contract):</strong> 61.5%의 고객이 월 단위 계약을 사용하고 있으며, 이는 이탈율이 높은 주요 원인이 될 수 있습니다.</li>
+                  <li><strong>결제 방식 (PaymentMethod):</strong> 전자 수표 사용 고객이 41.7%로 가장 많습니다.</li>
+                </ul>
+            
+                <p><strong>연속형 컬럼 분석:</strong></p>
+                <ul>
+                  <li><strong>가입 기간 (tenure):</strong> 평균 가입 기간이 33개월로, 상대적으로 중간 정도의 기간을 유지하고 있습니다.</li>
+                </ul>
+              </div>
+              <div class="card summary">
+                <h2>결론:</h2>
+                  <p>Fiber optic 사용 고객(64%)이 많지만, 온라인 보안(64.1%), 기술 지원(63.7%), 기기 보호(56.2%) 같은 추가 서비스를 많이 사용하지 않습니다. 이들은 고속 인터넷을 사용하는 만큼, 추가 서비스로 만족도를 높일 기회가 있습니다.</p>
+                  <p>월 단위 계약(61.5%)을 사용하는 고객이 많아 이탈 가능성이 큽니다.</p>
+                  <p>전자 수표 결제(41.7%) 사용 고객이 많아, 결제의 불편함이 이탈로 이어질 수 있습니다.</p>
+                  <p>높은 월 요금(81.76달러)으로 인해 추가 부담이 있을 수 있습니다.</p>
+              </div>
+            
+            </div>
+            
+
+          </div>  
+          <div style="margin: 50px 0 50px 0;">
+            <h1>이탈율 감소를 위한 10가지 전략</h1>
+            <div>
+
+              <div class="card">
+                <h2>1. Fiber optic 사용자 네트워크 속도 개선</h2>
+                <p>
+                  <strong>분석:</strong> Fiber optic 사용자의 네트워크 속도, 안정성, 서비스 품질을 분석하고 문제를 파악하여 개선 계획을 투명하게 공유함으로써 신뢰도를 강화합니다.
+                </p>
+              </div>
+            
+              <div class="card">
+                <h2>2. 온라인 보안 서비스 무료 제공</h2>
+                <p>
+                  <strong>분석:</strong> 온라인 보안을 사용하지 않는 고객에게 3개월간 무료 제공 후 유료 전환을 유도하여 이탈율을 줄입니다.
+                </p>
+              </div>
+            
+              <div class="card">
+                <h2>3. 온라인 백업 및 기기 보호 서비스 번들화</h2>
+                <p>
+                  <strong>제안:</strong> 온라인 백업과 기기 보호 서비스를 번들로 제공하고, 할인된 가격으로 고객이 추가 서비스를 사용하도록 유도합니다.
+                </p>
+              </div>
+            
+              <div class="card">
+                <h2>4. 장기 계약 프로모션</h2>
+                <p>
+                  <strong>분석:</strong> 월 단위 계약 고객(61.5%)에게 장기 계약 전환 시 요금 할인 또는 무료 서비스 혜택을 제공하여 이탈율을 감소시킵니다.
+                </p>
+              </div>
+            
+              <div class="card">
+                <h2>5. 결제 방식 전환 인센티브</h2>
+                <p>
+                  <strong>분석:</strong> 전자 수표를 사용하는 고객(41.7%)을 대상으로 신용카드나 자동이체 전환 시 추가 할인을 제공하여 더 편리한 결제 방식을 유도합니다.
+                </p>
+              </div>
+            
+              <div class="card">
+                <h2>6. 기술 지원 서비스 강화</h2>
+                <p>
+                  <strong>분석:</strong> 기술 지원 서비스를 사용하지 않는 고객(63.7%)에게 무료 체험 또는 저렴한 패키지를 제공해 서비스 만족도를 높이고 이탈율을 낮춥니다.
+                </p>
+              </div>
+            
+              <div class="card">
+                <h2>7. VIP 고객 관리 프로그램 도입</h2>
+                <p>
+                  <strong>제안:</strong> 장기 가입 고객에게 VIP 프로그램을 통해 월 요금 할인 및 추가 혜택을 제공하여 고객 충성도를 강화합니다.
+                </p>
+              </div>
+            
+              <div class="card">
+                <h2>8. 신규 고객 첫 6개월 혜택</h2>
+                <p>
+                  <strong>제안:</strong> 신규 고객에게 첫 6개월 동안 할인된 요금 및 추가 혜택을 제공해 이탈 가능성을 줄입니다.
+                </p>
+              </div>
+            
+              <div class="card">
+                <h2>9. 이탈 가능 고객 사전 식별 및 대응</h2>
+                <p>
+                  <strong>제안:</strong> 이탈 예측 모델을 통해 가입 기간이 짧거나 높은 요금을 지불하는 고객을 식별하고, 맞춤형 혜택 및 상담을 제공하여 이탈을 방지합니다.
+                </p>
+              </div>
+            
+              <div class="card">
+                <h2>10. 고객 피드백 기반 서비스 개선</h2>
+                <p>
+                  <strong>제안:</strong> 정기적인 고객 만족도 조사를 통해 불만족 요소를 파악하고, 신속한 기술 지원과 맞춤형 요금제를 제공하여 서비스 품질을 개선합니다.
+                </p>
+              </div>
+            
+            </div>
+          </div>
       </div>
     </div>
     <script src="{% static 'js/main.js' %}"></script>
