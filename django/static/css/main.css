@@ -2,30 +2,29 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
-
 
 body {
   font-family: 'Arial', sans-serif;
 }
 
 header {
-  background-color: rgb(50,123,255);
+  background-color: rgb(50, 123, 255);
 }
 
 img {
-  max-width: 100%;  
-  height: auto;    
-  display: block;   
-  margin: 0 auto;   
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
-.logo-image{
+.logo-image {
   width: 100px;
 }
 
-.logo{
+.logo {
   display: flex;
   align-items: center;
 }
@@ -43,7 +42,7 @@ img {
   color: #ffffff;
   text-decoration: none;
   font-weight: bold;
-  display:flex;
+  display: flex;
   align-items: center;
 }
 
@@ -54,7 +53,7 @@ img {
 
 .nav-links li {
   margin-left: 20px;
-  padding:30px 20px;
+  padding: 30px 20px;
 }
 
 .nav-links a {
@@ -69,22 +68,21 @@ img {
 }
 
 .active a {
-  color: rgb(50,123,255); 
+  color: rgb(50, 123, 255);
 }
 
 .nav-links a:hover {
-  color: #FFD700;
+  color: #ffd700;
 }
 
-.container{
+.container {
   margin: 0 auto;
   width: 70%;
   min-height: 100vh;
-  margin-bottom:100px;
-  display:flex;
+  margin-bottom: 100px;
+  display: flex;
   justify-content: center;
 }
-
 
 table {
   border-collapse: collapse;
@@ -95,7 +93,7 @@ table {
 }
 
 thead tr {
-  background-color: rgb(50,123,255); 
+  background-color: rgb(50, 123, 255);
   color: #ffffff;
   text-align: left;
   font-weight: bold;
@@ -114,7 +112,7 @@ tbody tr:nth-of-type(even) {
 }
 
 tbody tr:last-of-type {
-  border-bottom: 2px solid rgb(50,123,255); 
+  border-bottom: 2px solid rgb(50, 123, 255);
 }
 
 tbody tr:hover {
@@ -134,7 +132,7 @@ tbody tr:hover {
 }
 
 .analysis-section h2 {
-  font-size: 1.5em;
+  font-size: 2em; /* 글자 크기 조정 */
   margin: 15px 0 10px;
   color: #555;
 }
@@ -145,18 +143,16 @@ tbody tr:hover {
   color: #777;
 }
 
-.analysis-text p {
-  margin: 10px 0;
-  line-height: 1.6;
-  color: #444;
-}
-
 .analysis-text {
   margin: 20px 0;
   border: 1px solid #e0e0e0; /* 경계선 추가 */
-  border-radius: 8px; /* 둥근 모서리 */
-  padding: 15px; /* 여백 추가 */
+  border-radius: 1px; /* 둥근 모서리 */
+  padding: 20px; /* 여백 추가 */
   background-color: #f9f9f9; /* 배경 색상 */
+}
+
+.analysis-text p, .analysis-text ul {
+  font-size: 10em; /* 글씨체 크기 조정 */
 }
 
 .analysis-text h2 {
@@ -164,7 +160,7 @@ tbody tr:hover {
   margin: 10px 0;
   color: #007bff; /* 제목 색상 */
   border-bottom: 2px solid #007bff; /* 제목 아래 선 추가 */
-  padding-bottom: 5px; /* 제목과 선 사이 여백 */
+  padding-bottom: 1.5px; /* 제목과 선 사이 여백 */
 }
 
 .analysis-text h3 {
@@ -173,6 +169,9 @@ tbody tr:hover {
   color: #333;
 }
 
+.analysis-text ul {
+  list-style-position: inside; /* 동그라미 기호를 박스 안으로 */
+}
 
 .card {
   background-color: #fff;
@@ -188,7 +187,7 @@ tbody tr:hover {
 }
 
 .card h2 {
-  color: #4CAF50;
+  color: #4caf50;
   margin-bottom: 10px;
 }
 
@@ -212,4 +211,21 @@ tbody tr:hover {
 
 .summary h2 {
   color: #00695c;
+}
+
+.metrics {
+  font-size: 1.2em;
+  margin-top: 20px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.metrics p {
+  margin: 5px 0;
+}
+
+.metrics strong {
+  color: #2c3e50;
 }

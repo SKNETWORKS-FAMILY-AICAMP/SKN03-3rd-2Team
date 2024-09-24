@@ -1,5 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div>
+        <header>
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="/">
+                        <img class="logo-image" src="{% static 'img/logo.png' %}" />
+                        <h2>텔레핑</h2>
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li class="{% if request.path == '/' %}active{% endif %}">
+                        <a href="/">Home</a>
+                    </li>
+                    <li class="{% if request.path == '/analysis/' %}active{% endif %}">
+                        <a href="/analysis">Analysis</a>
+                    </li>
+                    <li class="{% if request.path == '/prediction' %}active{% endif %}">
+                        <a href="/prediction">Prediction</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <div class="container">
+            <div class="analysis-section">
+                <h1>Confusion Matrix(혼동행렬)</h1>
+                <div>
+                    <img src="{{ confusion_matrix_image_url }}" alt="Confusion Matrix">
+                </div>
+                <div class="analysis-text">
+                    <h2>Confusion Matrix 설명</h2>
+                    <p>
+                        혼동 행렬은 모델의 예측 성능을 평가하는 데 사용됩니다. 
+                        행렬의 각 요소는 다음과 같은 의미를 가집니다:
+                    </p>
+                    <ul>
+                        <li><strong>True Positive (TP):</strong> 실제로 이탈한 고객을 정확히 이탈한 것으로 예측한 경우 (925)</li>
+                        <li><strong>False Positive (FP):</strong> 실제로 이탈하지 않은 고객을 이탈한 것으로 잘못 예측한 경우 (111)</li>
+                        <li><strong>True Negative (TN):</strong> 실제로 이탈하지 않은 고객을 정확히 이탈하지 않은 것으로 예측한 경우 (183)</li>
+                        <li><strong>False Negative (FN):</strong> 실제로 이탈한 고객을 이탈하지 않은 것으로 잘못 예측한 경우 (190)</li>
+                    </ul>
+                    <p>
+                        혼동 행렬을 통해 모델의 정확도, 정밀도, 재현율 등의 다양한 성능 지표를 계산할 수 있습니다.
+                    </p>
+                </div>
+                <h1>ROC Curve</h1>
+                <div>
+                    <img src="{{ roc_curve_image_url }}" alt="ROC Curve">
+                </div>
+                <div class="analysis-text">
+                    <h2>ROC Curve 설명</h2>
+                    <p>
+                        ROC 곡선은 모델의 분류 성능을 평가하는 데 사용됩니다. 
+                        곡선의 각 요소는 다음과 같은 의미를 가집니다:
+                    </p>
+                    <ul>
+                        <li><strong>True Positive Rate (TPR):</strong> 실제 양성 샘플 중 양성으로 예측한 비율 (재현율)</li>
+                        <li><strong>False Positive Rate (FPR):</strong> 실제 음성 샘플 중 양성으로 잘못 예측한 비율</li>
+                    </ul>
+                    <p>
+                        ROC 곡선 아래의 면적 (AUC)은 모델의 분류 성능을 나타내며, 1에 가까울수록 성능이 좋음을 의미합니다.
+                    </p>
+                </div>
+                <h1>Precision-Recall Curve</h1>
+                <div>
+                    <img src="{{ pr_curve_image_url }}" alt="Precision-Recall Curve">
+                </div>
+                <div class="analysis-text">
+                    <h2>Precision-Recall Curve 설명</h2>
+                    <p>
+                        Precision-Recall 곡선은 모델의 분류 성능을 평가하는 데 사용됩니다. 
+                        곡선의 각 요소는 다음과 같은 의미를 가집니다:
+                    </p>
+                    <ul>
+                        <li><strong>Precision:</strong> 양성으로 예측한 샘플 중 실제 양성인 샘플의 비율</li>
+                        <li><strong>Recall:</strong> 실제 양성 샘플 중 양성으로 예측한 샘플의 비율 (재현율)</li>
+                    </ul>
+                    <p>
+                        Precision-Recall 곡선 아래의 면적 (AUC)은 모델의 분류 성능을 나타내며, 1에 가까울수록 성능이 좋음을 의미합니다.
+                    </p>
+                </div>
+                <h1>Evaluation Metrics</h1>
+                <div class="metrics">
+                    <div class="card">
+                        <p><strong>ROC AUC:</strong> {{ roc_auc }}</p>
+                        <p><strong>F1 Score:</strong> {{ f1_score }}</p>
+                        <p><strong>Accuracy:</strong> {{ accuracy }}</p>
+                        <p><strong>Precision:</strong> {{ precision }}</p>
+                        <p><strong>Recall:</strong> {{ recall }}</p>
+                        <p><strong>PR AUC:</strong> {{ pr_auc }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div>
+        <header>
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="/">
+                        <img class="logo-image" src="{% static 'img/logo.png' %}" />
+                        <h2>텔레핑</h2>
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li class="{% if request.path == '/' %}active{% endif %}">
+                        <a href="/">Home</a>
+                    </li>
+                    <li class="{% if request.path == '/analysis/' %}active{% endif %}">
+                        <a href="/analysis">Analysis</a>
+                    </li>
+                    <li class="{% if request.path == '/prediction' %}active{% endif %}">
+                        <a href="/prediction">Prediction</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <div class="container">
+            <div class="analysis-section">
+                <h2>Confusion Matrix</h2>
+                <div>
+                    <img src="{{ confusion_matrix_image_url }}" alt="Confusion Matrix">
+                </div>
+                <div class="analysis-text">
+                    <h2>Confusion Matrix 설명</h2>
+                    <p>
+                        혼동 행렬은 모델의 예측 성능을 평가하는 데 사용됩니다. 
+                        행렬의 각 요소는 다음과 같은 의미를 가집니다:
+                    </p>
+                    <ul>
+                        <li><strong>True Positive (TP):</strong> 실제로 이탈한 고객을 정확히 이탈한 것으로 예측한 경우 (925)</li>
+                        <li><strong>False Positive (FP):</strong> 실제로 이탈하지 않은 고객을 이탈한 것으로 잘못 예측한 경우 (111)</li>
+                        <li><strong>True Negative (TN):</strong> 실제로 이탈하지 않은 고객을 정확히 이탈하지 않은 것으로 예측한 경우 (183)</li>
+                        <li><strong>False Negative (FN):</strong> 실제로 이탈한 고객을 이탈하지 않은 것으로 잘못 예측한 경우 (190)</li>
+                    </ul>
+                    <p>
+                        혼동 행렬을 통해 모델의 정확도, 정밀도, 재현율 등의 다양한 성능 지표를 계산할 수 있습니다.
+                    </p>
+                </div>
+                <h2>ROC Curve</h2>
+                <div>
+                    <img src="{{ roc_curve_image_url }}" alt="ROC Curve">
+                </div>
+                <div class="analysis-text">
+                    <h2>ROC Curve 설명</h2>
+                    <p>
+                        ROC 곡선은 모델의 분류 성능을 평가하는 데 사용됩니다. 
+                        곡선의 각 요소는 다음과 같은 의미를 가집니다:
+                    </p>
+                    <ul>
+                        <li><strong>True Positive Rate (TPR):</strong> 실제 양성 샘플 중 양성으로 예측한 비율 (재현율)</li>
+                        <li><strong>False Positive Rate (FPR):</strong> 실제 음성 샘플 중 양성으로 잘못 예측한 비율</li>
+                    </ul>
+                    <p>
+                        ROC 곡선 아래의 면적 (AUC)은 모델의 분류 성능을 나타내며, 1에 가까울수록 성능이 좋음을 의미합니다.
+                    </p>
+                </div>
+                <h2>Precision-Recall Curve</h2>
+                <div>
+                    <img src="{{ pr_curve_image_url }}" alt="Precision-Recall Curve">
+                </div>
+                <div class="analysis-text">
+                    <h2>Precision-Recall Curve 설명</h2>
+                    <p>
+                        Precision-Recall 곡선은 모델의 분류 성능을 평가하는 데 사용됩니다. 
+                        곡선의 각 요소는 다음과 같은 의미를 가집니다:
+                    </p>
+                    <ul>
+                        <li><strong>Precision:</strong> 양성으로 예측한 샘플 중 실제 양성인 샘플의 비율</li>
+                        <li><strong>Recall:</strong> 실제 양성 샘플 중 양성으로 예측한 샘플의 비율 (재현율)</li>
+                    </ul>
+                    <p>
+                        Precision-Recall 곡선 아래의 면적 (AUC)은 모델의 분류 성능을 나타내며, 1에 가까울수록 성능이 좋음을 의미합니다.
+                    </p>
+                </div>
+                <h2>Evaluation Metrics</h2>
+                <p>ROC AUC: {{ roc_auc }}</p>
+                <p>F1 Score: {{ f1_score }}</p>
+                <p>Accuracy: {{ accuracy }}</p>
+                <p>Precision: {{ precision }}</p>
+                <p>Recall: {{ recall }}</p>
+                <p>PR AUC: {{ pr_auc }}</p>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -34,7 +299,23 @@
         </nav>
       </header>
       <div class="container"></div>
+<<<<<<< HEAD
+      <h2>Confusion Matrix</h2>
     </div>
+    <div>
+      <img src="{{ confusion_matrix_image_url }}" alt="Confusion Matrix">
+    </div>
+    <h2>ROC Curve</h2>
+    <div>
+        <img src="{{ roc_curve_image_url }}" alt="ROC Curve">
+    </div>
+    <h2>Evaluation Metrics</h2>
+    <p>ROC AUC: {{ roc_auc }}</p>
+    <p>F1 Score: {{ f1_score }}</p>
+=======
+    </div>
+>>>>>>> b893e63d9c6700991f74fce12d31c95351f4d5a1
     <script src="{% static 'js/main.js' %}"></script>
   </body>
-</html>
+</html> -->
+
