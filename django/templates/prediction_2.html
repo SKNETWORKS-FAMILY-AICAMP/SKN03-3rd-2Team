@@ -36,43 +36,44 @@
         </header>
         <div class="container">
             <div class="predict-text">
-                <h1 class="title">이탈 방지 전략에 따른 데이터 수정 1</h1>
+                <h1 class="title">이탈 방지 전략에 따른 데이터 수정 2</h1>
                 <h2>[온라인 보안 서비스 • 기술 지원 서비스]</h2>
-                <strong>Fiber optic 사용자의 월 요금 10% 할인</strong>
-                <p>✅ Fiber optic 인터넷 서비스를 사용하는 고객에게 10% 할인을 적용</p>
-                <strong>온라인 보안 서비스 미사용 고객 중 15%에게 보안 제공 (No -> Yes)</strong>
-                <p>✅ 온라인 보안 서비스를 사용하지 않는 고객의 15%를 무작위로 선택하여 보안 서비스를 제공</p>
-                <strong>온라인 백업 및 기기 보호 미사용 고객 중 15%에게 두 서비스 제공 (No -> Yes)</strong>
-                <p>✅ 온라인 백업과 기기 보호 서비스를 모두 사용하지 않는 고객의 15%를 무작위로 선택하여 두 서비스를 제공</p>
-                <strong>기술 지원 미사용 고객 중 15%에게 기술 지원 제공 (No -> Yes)</strong>
-                <p>✅ 기술 지원을 사용하지 않는 고객의 15%를 무작위로 선택하여 기술 지원 제공</p>
+                <strong>Fiber optic 사용자의 월 요금 15% 할인</strong>
+                <p>✅ Fiber optic 인터넷 서비스를 사용하는 고객에게 15% 할인을 적용</p>
+                <strong>온라인 보안 서비스 미사용 고객 중 20%에게 보안 제공 (No -> Yes)</strong>
+                <p>✅ 온라인 보안 서비스를 사용하지 않는 고객의 20%를 무작위로 선택하여 보안 서비스를 제공</p>
+                <strong>온라인 백업 및 기기 보호 미사용 고객 중 20%에게 두 서비스 제공 (No -> Yes)</strong>
+                <p>✅ 온라인 백업과 기기 보호 서비스를 모두 사용하지 않는 고객의 20%를 무작위로 선택하여 두 서비스를 제공</p>
+                <strong>기술 지원 미사용 고객 중 20%에게 기술 지원 제공 (No -> Yes)</strong>
+                <p>✅ 기술 지원을 사용하지 않는 고객의 20%를 무작위로 선택하여 기술 지원 제공</p>
                 </p>
                 <h2>[가입 기간]</h2>
-                <strong>월 단위 계약 고객 중 15%를 1년 계약으로 전환</strong>
-                <p>🎁 월 단위 계약 고객의 15%를 무작위로 선택하여 1년 계약으로 전환</p>
-                <strong>장기고객(24개월 이상) 대상 월 요금 10% 할인 혜택</strong>
-                <p>〽️ 가입 기간이 24개월 이상인 고객에게 10% 할인 적용</p>
+                <strong>월 단위 계약 고객 중 20%를 1년 계약으로 전환</strong>
+                <p>🎁 월 단위 계약 고객의 20%를 무작위로 선택하여 1년 계약으로 전환</p>
+                <strong>장기고객(24개월 이상) 대상 월 요금 15% 할인 혜택</strong>
+                <p>〽️ 가입 기간이 24개월 이상인 고객에게 15% 할인 적용</p>
                 <strong>신규 고객(6개월 이하) 대상 월 요금 20% 할인 혜택</strong>
                 <p>〽️ 가입 기간이 6개월 이하인 신규 고객에게 20% 할인 적용</p>
                 <strong>가입 기간이 12개월 이하 + 월 납부액이 높은 고객 대상 요금 15% 할인 혜택</strong>
                 <p>〽️ 가입 기간 12개월 이하, 월 요금이 중앙값보다 높은 고객에게 15% 할인 적용</p>
                 <h2>[결제 방식]</h2>
-                <strong>전자 수표를 사용하는 고객 중 15%를 신용카드/자동이체로 전환</strong>
-                <p>💳  전자 수표 결제 이용 고객의 15%를 무작위로 선택하여 신용 카드(자동) / 은행 이체(자동)로 전환</p>
+                <strong>전자 수표를 사용하는 고객 중 20%를 신용카드/자동이체로 전환</strong>
+                <p>💳  전자 수표 결제 이용 고객의 20%를 무작위로 선택하여 신용 카드(자동) / 은행 이체(자동)로 전환</p>
+                
             </div>
             <div class="analysis-section">
                 <h2>원본 데이터 예측값 비율</h2>
                 <div>
                     <img src="{{ Donut_image_url_origin }}" alt="Donut Chart">
                 </div>
-                <h2>첫 번째 수정 데이터 예측값 비율</h2>
+                <h2>두 번째 수정 데이터 예측값 비율</h2>
                 <div>
-                    <img src="{{ Donut_image_url }}" alt="Donut Chart">
-                </div>           
+                    <img src="{{ Donut_image_url_2 }}" alt="Donut Chart">
+                </div>                
             </div>
         </div>
         <div class="button-container">
-            <a href="{% url 'more_prediction' %}" class="navigate-button">🔍 두 번째 예측 Click!</a>
+            <a href="{% url 'prediction' %}" class="navigate-button">🔍 첫 번째 예측 Click!</a>
         </div>
     </div>
     <script src="{% static 'js/main.js' %}"></script>
