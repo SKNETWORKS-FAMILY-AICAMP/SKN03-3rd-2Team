@@ -5,19 +5,37 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 import joblib
+import pandas as pd
 from django.shortcuts import render
 from django.conf import settings
 from sklearn.metrics import confusion_matrix, roc_auc_score, f1_score, roc_curve
-from sklearn.metrics import accuracy_score, precision_score, recall_score, precision_recall_curve, auc  # 임포트 추가
+from sklearn.metrics import accuracy_score, precision_score, recall_score, precision_recall_curve, auc
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from main.transformers import DataCleaning, FeatureEngineering, ScaleAndTransform
 
 def main_view(request):
     # 모델 로드
     model_path = os.path.join(settings.BASE_DIR, 'static', 'pkl', 'HistGradientBoostingClassifier.pkl')
     model = joblib.load(model_path)
 
-    # 데이터 로드
-    data_path = os.path.join(settings.BASE_DIR, 'static', 'pkl', 'data.pkl')
-    X_test_transformed, y_test = joblib.load(data_path)
+    # 파이프라인 로드
+    pipeline_path = os.path.join(settings.BASE_DIR, 'static', 'pkl', 'pipeline.pkl')
+    pipeline = joblib.load(pipeline_path)
+
+    # 데이터 로드 및 전처리
+    file_path = os.path.join(settings.BASE_DIR, 'static', 'data', 'teleco-customer-churn.csv')
+    df = pd.read_csv(file_path)
+
+    # 특성과 레이블 분리
+    X = df.drop(columns=['Churn'])
+    y = df['Churn'].apply(lambda x: 1 if x == 'Yes' else 0)
+
+    # 학습 데이터와 테스트 데이터 분리
+    _, X_test, _, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # 테스트 데이터 전처리
+    X_test_transformed = pipeline.transform(X_test)
 
     # 예측 값 생성
     y_pred = model.predict(X_test_transformed)
@@ -93,13 +111,6 @@ def main_view(request):
         'recall': recall,
         'pr_auc': pr_auc
     })
-
-
-
-
-
-
-
 # import matplotlib
 # matplotlib.use('Agg')  # Agg 백엔드 사용
 
