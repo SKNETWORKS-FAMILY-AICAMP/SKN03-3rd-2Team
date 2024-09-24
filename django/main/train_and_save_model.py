@@ -3,7 +3,6 @@ import os
 import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.ensemble import HistGradientBoostingClassifier
 from main.transformers import DataCleaning, FeatureEngineering, ScaleAndTransform  # 임포트 추가
 
 # 데이터 로드 및 전처리 함수
