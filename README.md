@@ -68,7 +68,8 @@
 마케팅 캠페인과 서비스 개선을 추천합니다.
 
 ## 2. 아키텍처
-![ping](https://github.com/user-attachments/assets/9ff2762d-8a0d-48bd-9365-cf9171cba468)
+![telco drawio](https://github.com/user-attachments/assets/1185cb4d-bf2d-4d27-ba8b-0e3ec0a5daff)
+
 
 ## 3. 주요 분석 내용 
    ### 1. 전체 데이터 확인 및 타겟 데이터분석
